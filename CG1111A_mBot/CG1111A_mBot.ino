@@ -7,17 +7,26 @@
 #define L_W_R_B (0x02)
 #define L_W_R_W (0x03)
 
+// COLOUR SENSOR
+#define CS_INA A0
+#define CS_INB A1
 
-#define LDR A0
-#define LED_R 1
-#define LED_G 2
-#define LED_B 3
+#define CS_LED_OFF 0
+#define CS_LED_R 1
+#define CS_LED_G 2
+#define CS_LED_B 3
+#define CS_LDR_PIN A2
 
+#define CS_SAMPLES 100
+#define CS_DELAY_BEFORE_READING 1000
 
 MeLineFollower lineFinder(PORT_2);  // assigning lineFinder to RJ25 port 2
 MeDCMotor leftMotor(M1);            // assigning leftMotor to port M1
 MeDCMotor rightMotor(M2);           // assigning RightMotor to port M2
 int status = 0;                     // global status; 0 = do nothing, 1 = mBot runs
+
+long rgb_values[3] = {0, 0, 0};
+int led_pins[3] = {LED_R, LED_G, LED_B};
 
 // Code for playing celebratory tune
 void celebrate() {}
@@ -58,38 +67,67 @@ int readLDR() {
 void stopMotor() {
   status = 0;
 }
-int shineRed() {  // Code for turning on the red LED only
-  digitalWrite(LED_R, HIGH);
-  delay(100);
-  int result = readLDR();
-  digitalWrite(LED_R, LOW);
-  return result;
-}
-int shineGreen() {  // Code for turning on the green LED only
-  digitalWrite(LED_G, HIGH);
-  delay(100);
-  int result = readLDR();
-  digitalWrite(LED_G, LOW);
-  return result;
-}
-int shineBlue() {  // Code for turning on the blue LED only
-  digitalWrite(LED_B, HIGH);
-  delay(100);
-  int result = readLDR();
-  digitalWrite(LED_B, LOW);
-  return result;
-}
-int detectColour() {
-  int redResult = shineRed();      // Shine Red, read LDR after some delay
-  int greenResult = shineGreen();  // Shine Green, read LDR after some delay
-  int blueResult = shineBlue();    // Shine Blue, read LDR after some delay
 
-  // Run algorithm for colour decoding
+void setupColourSensor()
+{
+  pinMode(CS_INA, OUTPUT);
+  pinMode(CS_INB, OUTPUT);
+  pinMode(LDR_PIN, INPUT);
+  digitalWrite(CS_INA, LOW);
+  digitalWrite(CS_INB, LOW);
 }
+
+void readColour(long *colourValue)
+{
+  *colourValue = 0;
+
+  for (int i = COLOUR_SAMPLES; i > 0; i--)
+  {
+    // need to check if it will overflow (tho hopefully not)
+    *colourValue += (analogRead(LDR_PIN));
+  }
+}
+
+// for HD74LS139 (two to four multiplexer)
+void enablePin(int pin_number)
+{
+  if (pin_number == 0)
+  {
+    digitalWrite(CS_INA, LOW);
+    digitalWrite(CS_INB, LOW);
+  }
+  else if (pin_number == 1)
+  {
+    digitalWrite(CS_INA, HIGH);
+    digitalWrite(CS_INB, LOW);
+  }
+  else if (pin_number == 2)
+  {
+    digitalWrite(CS_INA, LOW);
+    digitalWrite(CS_INB, HIGH);
+  }
+  else if (pin_number == 3)
+  {
+    digitalWrite(CS_INA, HIGH);
+    digitalWrite(CS_INB, HIGH);
+  }
+}
+
+int detectColour(int led_pins[3], long rgb_values[3])
+{
+  for (int i = 0; i < 3; i++)
+  {
+    enablePin(led_pins[i]);
+    delay(CS_DELAY_BEFORE_READING);
+    readColour(rgb_values + i);
+  }
+  enablePin(LED_OFF);
+}
+
 void setup() {
-  pinMode(LDR, INPUT);  // Setup A0 as input for the LDR
   pinMode(A7, INPUT);   // Setup A7 as input for the push button
   Serial.begin(9600);   // Setup serial monitor for debugging purpose
+  setupColourSensor();  // Setup colour sensor
 }
 void loop() {
   if (analogRead(A7) < 100) {  // If push button is pushed, the value will be very low
@@ -111,8 +149,17 @@ void loop() {
     } else if (sensorState == L_B_R_B) {  // situation 4
       leftMotor.stop();
       rightMotor.stop();
-      // int colour = detectColour();
-      // decide next move
+      
+      // will be stored in the array rgb_values
+       detectColour(led_pins, rgb_values);
+       // we will just print them out for debugging
+       for (int i = 0; i < 3; i++)
+       {
+         Serial.print(rgb_values[i]);
+         Serial.print("  ");
+       }
+       Serial.println();
+       // decide next move
     }
     delay(20);  // decision making interval (in milliseconds)
   }
