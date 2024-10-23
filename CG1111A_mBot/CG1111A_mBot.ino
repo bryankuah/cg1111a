@@ -1,11 +1,13 @@
 #include "MeMCore.h"
 
 #define TURN_90_DELAY
+#define TURN_180_DELAY
+#define ONE_WALL_DELAY
 
-#define L_B_R_B (0x00)
-#define L_B_R_W (0x01)
-#define L_W_R_B (0x02)
-#define L_W_R_W (0x03)
+#define L_B_R_B (0x00) // left black, right black
+#define L_B_R_W (0x01) // left black, right white
+#define L_W_R_B (0x02) // left white, right black
+#define L_W_R_W (0x03) // left white, right white
 
 // COLOUR SENSOR
 #define CS_INA A0
@@ -48,16 +50,36 @@ void turnLeft() {
   delay(TURN_90_DELAY);
 }
 // Code for u-turn
-void uTurn() {}
+void uTurn() {
+  leftMotor.run(150);   // Left wheel goes backward (clockwise)
+  rightMotor.run(150);  // Right wheel goes backward (clockwise)
+  delay(TURN_180_DELAY);
+}
 // Code for double left turn
-void doubleLeftTurn() {}
+void doubleLeftTurn() {
+  turnLeft();
+  moveForward();
+  delay(ONE_WALL_DELAY);
+  turnLeft();
+}
 // Code for double right turn
-void doubleRightTurn() {}
+void doubleRightTurn() {
+  turnRight();
+  moveForward();
+  delay(ONE_WALL_DELAY);
+  turnRight();
+}
 
 // Code for nudging slightly to the left for some short interval
-void nudgeLeft() {}
+void nudgeLeft() {
+  leftMotor.run(0);                   // Left wheel stops
+  rightMotor.run(150);  // Right wheel goes forward
+}
 // Code for nudging slightly to the right for some short interval
-void nudgeRight() {}
+void nudgeRight() {
+  leftMotor.run(-150);                // Left wheel go forward
+  rightMotor.run(0);                  // Right wheel stops
+}
 // Code for turning on the IR emitter only
 void shineIR() {}
 int readLDR() {
@@ -65,7 +87,8 @@ int readLDR() {
 }
 // Code for stopping motor
 void stopMotor() {
-  status = 0;
+  leftMotor.stop();
+  rightMotor.stop();
 }
 
 void setupColourSensor()
@@ -138,28 +161,23 @@ void loop() {
     int sensorState = lineFinder.readSensors();  // read the line sensor's state
     Serial.println(sensorState);
     if (sensorState == L_W_R_W) {         // situation 1
-      leftMotor.run(-200);                // Left wheel goes forward (anti-clockwise)
-      rightMotor.run(200);                // Right wheel goes forward (clockwise)
+      moveForward();
     } else if (sensorState == L_B_R_W) {  // situation 2
-      leftMotor.run(0);                   // Left wheel stops
-      rightMotor.run(150);                // Right wheel go forward
+      nudgeLeft();
     } else if (sensorState == L_W_R_B) {  // situation 3
-      leftMotor.run(-150);                // Left wheel go forward
-      rightMotor.run(0);                  // Right wheel stops
+      nudgeRight();
     } else if (sensorState == L_B_R_B) {  // situation 4
-      leftMotor.stop();
-      rightMotor.stop();
-      
+      stopMotor();
       // will be stored in the array rgb_values
-       detectColour(led_pins, rgb_values);
-       // we will just print them out for debugging
-       for (int i = 0; i < 3; i++)
-       {
-         Serial.print(rgb_values[i]);
-         Serial.print("  ");
-       }
-       Serial.println();
-       // decide next move
+      detectColour(led_pins, rgb_values);
+      // we will just print them out for debugging
+      for (int i = 0; i < 3; i++)
+      {
+        Serial.print(rgb_values[i]);
+        Serial.print("  ");
+      }
+      Serial.println();
+      // decide next move
     }
     delay(20);  // decision making interval (in milliseconds)
   }
