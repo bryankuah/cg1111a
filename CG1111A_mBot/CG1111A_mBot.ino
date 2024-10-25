@@ -34,7 +34,7 @@ void turnLeft() {
 void uTurn() {
   leftMotor.run(150);   // Left wheel goes backward (clockwise)
   rightMotor.run(150);  // Right wheel goes backward (clockwise)
-  delay(TURN_180_DELAY);
+  delay(2 * TURN_90_DELAY);
 }
 // Code for double left turn
 void doubleLeftTurn() {
@@ -146,17 +146,7 @@ void loop() {
   if (status == 1) {                             // run mBot only if status is 1
     int sensorState = lineFinder.readSensors();  // read the line sensor's state
     Serial.println(sensorState);
-
-    ultraDistance = readUltraDistance();
-    Serial.println(ultraDistance);
-
-    if (sensorState == L_W_R_W) {         // situation 1
-      moveForward();
-    } else if (sensorState == L_B_R_W) {  // situation 2
-      nudgeLeft();
-    } else if (sensorState == L_W_R_B) {  // situation 3
-      nudgeRight();
-    } else if (sensorState == L_B_R_B) {  // situation 4
+    if (sensorState == L_B_R_B) {  // situation 4
       stopMotor();
       // will be stored in the array rgb_values
       detectColour(led_pins, rgb_values);
@@ -168,7 +158,15 @@ void loop() {
       }
       Serial.println();
       // decide next move
+    } else {
+      ultraDistance = readUltraDistance();
+      if (ultraDistance > 10 || (sensorState == L_W_R_W && ultraDistance < 7 && ultraDistance > 5)) {         // situation 1
+        moveForward();
+      } else if (sensorState == L_B_R_W || ultraDistance >= 7) {  // situation 2
+        nudgeLeft();
+      } else if (sensorState == L_W_R_B || ultraDistance <= 5) {  // situation 3
+        nudgeRight();
+      }
     }
-    delay(20);  // decision making interval (in milliseconds)
   }
 }
