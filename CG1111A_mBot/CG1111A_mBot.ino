@@ -1,11 +1,12 @@
 #include "MeMCore.h"
 #include "configurations.h"
 
+MeUltrasonicSensor ultraSensor(PORT_1); // assigning ultraSensor to RJ25 port 1
 MeLineFollower lineFinder(PORT_2);  // assigning lineFinder to RJ25 port 2
 MeDCMotor leftMotor(M1);            // assigning leftMotor to port M1
 MeDCMotor rightMotor(M2);           // assigning RightMotor to port M2
 int status = 0;                     // global status; 0 = do nothing, 1 = mBot runs
-long ultra_duration; //duration for Ultrasound echo
+float ultraDistance;
 
 long rgb_values[3] = {0, 0, 0};
 int led_pins[3] = {CS_LED_R, CS_LED_G, CS_LED_B};
@@ -81,13 +82,6 @@ void setupColourSensor()
   digitalWrite(CS_INB, LOW);
 }
 
-void setupUltraSensor()
-{
-  pinMode(TRIGGER, OUTPUT);
-  digitalWrite(TRIGGER, LOW);
-  pinMode(ECHO, INPUT);
-}
-
 void readColour(long *colourValue)
 {
   *colourValue = 0;
@@ -125,12 +119,7 @@ void enablePin(int pin_number)
 }
 
 float readUltraDistance() {
-  digitalWrite(TRIGGER, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(TRIGGER, LOW);
-  delayMicroseconds(10);
-  ultra_duration = pulseIn(ECHO, HIGH, ULTRA_TIMEOUT);
-  return duration / 2 * SPEED_OF_SOUND - 4;
+  return ultraSensor.distanceCm() - 4;
 }
 
 int detectColour(int led_pins[3], long rgb_values[3])
@@ -148,7 +137,6 @@ void setup() {
   pinMode(A7, INPUT);   // Setup A7 as input for the push button
   Serial.begin(9600);   // Setup serial monitor for debugging purpose
   setupColourSensor();  // Setup colour sensor
-  setupUltraSensor(); // Setup Ultrasonic Sensor
 }
 void loop() {
   if (analogRead(A7) < 100) {  // If push button is pushed, the value will be very low
@@ -161,6 +149,7 @@ void loop() {
 
     ultraDistance = readUltraDistance();
     Serial.println(ultraDistance);
+
     if (sensorState == L_W_R_W) {         // situation 1
       moveForward();
     } else if (sensorState == L_B_R_W) {  // situation 2

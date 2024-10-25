@@ -24,6 +24,3 @@
 
 #define ULTRA_TIMEOUT 30000
 #define SPEED_OF_SOUND 0.0343 // centimetre/microsecond
-
-#define TRIGGER 12
-#define ECHO 11
