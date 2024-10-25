@@ -1,26 +1,5 @@
 #include "MeMCore.h"
-
-#define TURN_90_DELAY
-#define TURN_180_DELAY
-#define ONE_WALL_DELAY
-
-#define L_B_R_B (0x00) // left black, right black
-#define L_B_R_W (0x01) // left black, right white
-#define L_W_R_B (0x02) // left white, right black
-#define L_W_R_W (0x03) // left white, right white
-
-// COLOUR SENSOR
-#define CS_INA A0
-#define CS_INB A1
-
-#define CS_LED_OFF 0
-#define CS_LED_R 1
-#define CS_LED_G 2
-#define CS_LED_B 3
-#define CS_LDR_PIN A2
-
-#define CS_SAMPLES 100
-#define CS_DELAY_BEFORE_READING 1000
+#include "configurations.h"
 
 MeLineFollower lineFinder(PORT_2);  // assigning lineFinder to RJ25 port 2
 MeDCMotor leftMotor(M1);            // assigning leftMotor to port M1
@@ -28,7 +7,7 @@ MeDCMotor rightMotor(M2);           // assigning RightMotor to port M2
 int status = 0;                     // global status; 0 = do nothing, 1 = mBot runs
 
 long rgb_values[3] = {0, 0, 0};
-int led_pins[3] = {LED_R, LED_G, LED_B};
+int led_pins[3] = {CS_LED_R, CS_LED_G, CS_LED_B};
 
 // Code for playing celebratory tune
 void celebrate() {}
@@ -82,8 +61,9 @@ void nudgeRight() {
 }
 // Code for turning on the IR emitter only
 void shineIR() {}
+
 int readLDR() {
-  return analogRead(LDR);
+  return analogRead(CS_LDR_PIN);
 }
 // Code for stopping motor
 void stopMotor() {
@@ -95,7 +75,7 @@ void setupColourSensor()
 {
   pinMode(CS_INA, OUTPUT);
   pinMode(CS_INB, OUTPUT);
-  pinMode(LDR_PIN, INPUT);
+  pinMode(CS_LDR_PIN, INPUT);
   digitalWrite(CS_INA, LOW);
   digitalWrite(CS_INB, LOW);
 }
@@ -104,10 +84,10 @@ void readColour(long *colourValue)
 {
   *colourValue = 0;
 
-  for (int i = COLOUR_SAMPLES; i > 0; i--)
+  for (int i = CS_SAMPLES; i > 0; i--)
   {
     // need to check if it will overflow (tho hopefully not)
-    *colourValue += (analogRead(LDR_PIN));
+    *colourValue += (analogRead(CS_LDR_PIN));
   }
 }
 
@@ -144,7 +124,7 @@ int detectColour(int led_pins[3], long rgb_values[3])
     delay(CS_DELAY_BEFORE_READING);
     readColour(rgb_values + i);
   }
-  enablePin(LED_OFF);
+  enablePin(CS_LED_OFF);
 }
 
 void setup() {
