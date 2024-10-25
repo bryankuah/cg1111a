@@ -1,15 +1,15 @@
 #include "MeMCore.h"
 #include "configurations.h"
 
-MeUltrasonicSensor ultraSensor(PORT_1); // assigning ultraSensor to RJ25 port 1
-MeLineFollower lineFinder(PORT_2);  // assigning lineFinder to RJ25 port 2
-MeDCMotor leftMotor(M1);            // assigning leftMotor to port M1
-MeDCMotor rightMotor(M2);           // assigning RightMotor to port M2
-int status = 0;                     // global status; 0 = do nothing, 1 = mBot runs
+MeUltrasonicSensor ultraSensor(PORT_1);  // assigning ultraSensor to RJ25 port 1
+MeLineFollower lineFinder(PORT_2);       // assigning lineFinder to RJ25 port 2
+MeDCMotor leftMotor(M1);                 // assigning leftMotor to port M1
+MeDCMotor rightMotor(M2);                // assigning RightMotor to port M2
+int status = false;                      // global status; 0 = do nothing, 1 = mBot runs
 float ultraDistance;
 
-long rgb_values[3] = {0, 0, 0};
-int led_pins[3] = {CS_LED_R, CS_LED_G, CS_LED_B};
+long rgb_values[3] = { 0, 0, 0 };
+int led_pins[3] = { CS_LED_R, CS_LED_G, CS_LED_B };
 
 // Code for playing celebratory tune
 void celebrate() {}
@@ -53,13 +53,13 @@ void doubleRightTurn() {
 
 // Code for nudging slightly to the left for some short interval
 void nudgeLeft() {
-  leftMotor.run(0);                   // Left wheel stops
+  leftMotor.run(0);     // Left wheel stops
   rightMotor.run(150);  // Right wheel goes forward
 }
 // Code for nudging slightly to the right for some short interval
 void nudgeRight() {
-  leftMotor.run(-150);                // Left wheel go forward
-  rightMotor.run(0);                  // Right wheel stops
+  leftMotor.run(-150);  // Left wheel go forward
+  rightMotor.run(0);    // Right wheel stops
 }
 // Code for turning on the IR emitter only
 void shineIR() {}
@@ -73,8 +73,7 @@ void stopMotor() {
   rightMotor.stop();
 }
 
-void setupColourSensor()
-{
+void setupColourSensor() {
   pinMode(CS_INA, OUTPUT);
   pinMode(CS_INB, OUTPUT);
   pinMode(CS_LDR_PIN, INPUT);
@@ -82,37 +81,27 @@ void setupColourSensor()
   digitalWrite(CS_INB, LOW);
 }
 
-void readColour(long *colourValue)
-{
+void readColour(long *colourValue) {
   *colourValue = 0;
 
-  for (int i = CS_SAMPLES; i > 0; i--)
-  {
+  for (int i = CS_SAMPLES; i > 0; i--) {
     // need to check if it will overflow (tho hopefully not)
     *colourValue += (analogRead(CS_LDR_PIN));
   }
 }
 
 // for HD74LS139 (two to four multiplexer)
-void enablePin(int pin_number)
-{
-  if (pin_number == 0)
-  {
+void enablePin(int pin_number) {
+  if (pin_number == 0) {
     digitalWrite(CS_INA, LOW);
     digitalWrite(CS_INB, LOW);
-  }
-  else if (pin_number == 1)
-  {
+  } else if (pin_number == 1) {
     digitalWrite(CS_INA, HIGH);
     digitalWrite(CS_INB, LOW);
-  }
-  else if (pin_number == 2)
-  {
+  } else if (pin_number == 2) {
     digitalWrite(CS_INA, LOW);
     digitalWrite(CS_INB, HIGH);
-  }
-  else if (pin_number == 3)
-  {
+  } else if (pin_number == 3) {
     digitalWrite(CS_INA, HIGH);
     digitalWrite(CS_INB, HIGH);
   }
@@ -122,15 +111,34 @@ float readUltraDistance() {
   return ultraSensor.distanceCm() - 4;
 }
 
-int detectColour(int led_pins[3], long rgb_values[3])
-{
-  for (int i = 0; i < 3; i++)
-  {
+int detectColour(int led_pins[3], long rgb_values[3]) {
+  for (int i = 0; i < 3; i++) {
     enablePin(led_pins[i]);
     delay(CS_DELAY_BEFORE_READING);
     readColour(rgb_values + i);
   }
   enablePin(CS_LED_OFF);
+}
+
+void identifyColours(long rgb_vals[3]) {
+}
+
+// will not be ran in the final code
+void calibrateColourSensor() {
+  String colours[] = { "blue", "green", "pink", "red", "white", "orange" };
+  long rgb_values[3];
+
+  for (int i = 0; i < 6; i++) {
+    Serial.println("Place the sensor on " + colours[i] + " colour");
+    delay(5000);
+    detectColour(led_pins, rgb_values);
+    Serial.print("RGB values: ");
+    for (int j = 0; j < 3; j++) {
+      Serial.print(rgb_values[j]);
+      Serial.print(" ");
+    }
+    Serial.println();
+  }
 }
 
 void setup() {
@@ -140,10 +148,10 @@ void setup() {
 }
 void loop() {
   if (analogRead(A7) < 100) {  // If push button is pushed, the value will be very low
-    status = 1 - status;       // Toggle status
+    status = !status;          // Toggle status
     delay(500);                // Delay 500ms so that a button push won't be counted multiple times.
   }
-  if (status == 1) {                             // run mBot only if status is 1
+  if (status) {                                  // run mBot only if status is 1
     int sensorState = lineFinder.readSensors();  // read the line sensor's state
     Serial.println(sensorState);
     if (sensorState == L_B_R_B) {  // situation 4
@@ -151,8 +159,7 @@ void loop() {
       // will be stored in the array rgb_values
       detectColour(led_pins, rgb_values);
       // we will just print them out for debugging
-      for (int i = 0; i < 3; i++)
-      {
+      for (int i = 0; i < 3; i++) {
         Serial.print(rgb_values[i]);
         Serial.print("  ");
       }
@@ -160,7 +167,7 @@ void loop() {
       // decide next move
     } else {
       ultraDistance = readUltraDistance();
-      if (ultraDistance > 10 || (sensorState == L_W_R_W && ultraDistance < 7 && ultraDistance > 5)) {         // situation 1
+      if (ultraDistance > 10 || (sensorState == L_W_R_W && ultraDistance < 7 && ultraDistance > 5)) {  // situation 1
         moveForward();
       } else if (sensorState == L_B_R_W || ultraDistance >= 7) {  // situation 2
         nudgeLeft();
