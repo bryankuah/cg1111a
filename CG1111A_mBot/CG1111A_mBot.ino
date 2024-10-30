@@ -11,8 +11,7 @@ float ultraDistance;
 String colours[] = { "blue", "green", "pink", "red", "white", "orange" };
 long rgb_values[3] = { 0, 0, 0 };
 
-long recorded_rgb_values[6][3] = { { 5070, 5800, 6200 }, { 5300, 5770, 5130 }, { 5200, 5100, 5200 },
-                                   { 5750, 3840, 3950 }, { 4800, 5200, 5300 }, { 5400, 4283, 3600 } };
+long recorded_rgb_values[6][3] = { { 5070, 5800, 6200 }, { 5300, 5770, 5130 }, { 5200, 5100, 5200 }, { 5750, 3840, 3950 }, { 4800, 5200, 5300 }, { 5400, 4283, 3600 } };
 
 int num_colours = sizeof(recorded_rgb_values) / sizeof(recorded_rgb_values[0]);
 // static_assert(num_colours == 6, "Number of colours must be 6");
@@ -61,16 +60,40 @@ void doubleRightTurn() {
 
 // Code for nudging slightly to the left for some short interval
 void nudgeLeft() {
-  leftMotor.run(0);     // Left wheel stops
+  leftMotor.run(-50);   // Left wheel stops
   rightMotor.run(150);  // Right wheel goes forward
 }
+
 // Code for nudging slightly to the right for some short interval
 void nudgeRight() {
-  leftMotor.run(-150);  // Left wheel go forward
+  leftMotor.run(-150);  // Left wheel goes forward
+  rightMotor.run(50);   // Right wheel slows down
+}
+
+void rightWheelForwardOnly() {
+  leftMotor.run(0);     // Left wheel slows down
+  rightMotor.run(150);  // Right wheel goes forward
+}
+
+void leftWheelForwardOnly() {
+  leftMotor.run(-150);  // Left wheel goes forward
   rightMotor.run(0);    // Right wheel stops
 }
-// Code for turning on the IR emitter only
-void shineIR() {}
+
+// Code for reading the IR
+int readIR() {
+  int ambientValue = analogRead(IR_READ_PIN);
+  enablePin(0);
+  delay(50);
+  int shineValue = analogRead(IR_READ_PIN);
+  enablePin(3);
+  Serial.print(ambientValue);
+  Serial.print(" ");
+  Serial.print(shineValue);
+  Serial.print(" ");
+  Serial.println(shineValue - ambientValue);
+  return shineValue - ambientValue;
+}
 
 // Code for stopping motor
 void stopMotor() {
@@ -88,6 +111,12 @@ void setupColourSensor() {
   pinMode(CS_INA, OUTPUT);
   pinMode(CS_INB, OUTPUT);
   pinMode(CS_LDR_PIN, INPUT);
+  digitalWrite(CS_INA, LOW);
+  digitalWrite(CS_INB, LOW);
+}
+
+void setupIRSensor() {
+  pinMode(IR_READ_PIN, INPUT);
 }
 
 void readColour(long *colourValue) {
@@ -135,7 +164,8 @@ int detectColour(int led_pins[3], long rgb_values[3]) {
 }
 
 int identifyColours(long rgb_vals[3]) {
-  int colour_idx; int j;
+  int colour_idx;
+  int j;
   for (colour_idx = 0; colour_idx < 6; colour_idx++) {
     for (j = 0; j < 3; j++) {
       Serial.print(abs(rgb_vals[j] - recorded_rgb_values[colour_idx][j]));
@@ -145,10 +175,11 @@ int identifyColours(long rgb_vals[3]) {
         break;
       }
     }
-    if (j==3){
+    if (j == 3) {
       return colour_idx;
     }
-  }  return -1;
+  }
+  return -1;
 }
 
 // will not be ran in the final code
@@ -159,7 +190,7 @@ void calibrateColourSensor() {
     Serial.println("Place the sensor on " + colours[i] + " colour");
     delay(5000);
     detectColour(led_pins, rgb_values);
-    
+
     Serial.print("RGB values: ");
     for (int j = 0; j < 3; j++) {
       Serial.print(rgb_values[j]);
@@ -169,36 +200,19 @@ void calibrateColourSensor() {
   }
 }
 
+
 float readUltraDistance() {
   return ultraSensor.distanceCm() - 4;
 }
 
 
 void setup() {
-
   pinMode(A7, INPUT);   // Setup A7 as input for the push button
   Serial.begin(9600);   // Setup serial monitor for debugging purpose
   setupColourSensor();  // Setup colour sensor
-  while(true){
-    detectColour(led_pins, rgb_values);
-    int col = identifyColours(rgb_values);
-    Serial.print("Colours: ");
-    if(col != -1){
-    Serial.print(colours[col]);}
-
-    Serial.print(" RGB: ");
-    for(int i =0;i<3;i++){
-      Serial.print(rgb_values[i]);
-      Serial.print(" ");
-    }
-      Serial.println();
-  }
-  // calibrateColourSensor();
-  // while (true){
-  // for (int i=0; i<4; i++){
-  //   enablePin(i);
-  //   delay(1000);
-  // }
+  setupIRSensor();
+  // while (1) {
+  //   readIR();
   // }
 }
 
@@ -207,37 +221,52 @@ void loop() {
   if (analogRead(A7) < 100) {  // If push button is pushed, the value will be very low
     status = !status;          // Toggle status
     delay(500);                // Delay 500ms so that a button push won't be counted multiple times.
-    readColour(rgb_values);
-    colour_index = identifyColours(rgb_values);
-    if (colour_index != -1)
-    {
-      Serial.println("Colour detected: " + String(colours[colour_index]));
-    } else {
-      Serial.println("Colour not detected");
-    }
+    // readColour(rgb_values);
+    // colour_index = identifyColours(rgb_values);
+    // if (colour_index != -1)
+    // {
+    //   Serial.println("Colour detected: " + String(colours[colour_index]));
+    // } else {
+    //   Serial.println("Colour not detected");
+    // }
   }
   if (status) {                                  // run mBot only if status is 1
     int sensorState = lineFinder.readSensors();  // read the line sensor's state
-    Serial.println(sensorState);
+    // Serial.println(sensorState);
     if (sensorState == L_B_R_B) {  // situation 4
       stopMotor();
-      // will be stored in the array rgb_values
       detectColour(led_pins, rgb_values);
-      // we will just print them out for debugging
-      for (int i = 0; i < 3; i++) {
-        Serial.print(rgb_values[i]);
-        Serial.print("  ");
+      int col = identifyColours(rgb_values);
+      if (colours[col] == "pink") {
+        doubleLeftTurn();
+      } else if (colours[col] == "blue") {
+        doubleRightTurn();
+      } else if (colours[col] == "white") {
+        stopMotor();
+      } else if (colours[col] == "red") {
+        turnLeft();
+      } else if (colours[col] == "green") {
+        turnRight();
+      } else if (colours[col] == "orange") {
+        uTurn();
       }
-      Serial.println();
-      // decide next move
-    } else {
+    } else if (sensorState == L_B_R_W) {
+      rightWheelForwardOnly();
+    } else if (sensorState == L_W_R_B) {
+      leftWheelForwardOnly();
+    } else if (sensorState == L_W_R_W) {
       ultraDistance = readUltraDistance();
-      if (ultraDistance > 10 || (sensorState == L_W_R_W && ultraDistance < 7 && ultraDistance > 5)) {  // situation 1
-        moveForward();
-      } else if (sensorState == L_B_R_W || ultraDistance >= 7) {  // situation 2
-        nudgeLeft();
-      } else if (sensorState == L_W_R_B || ultraDistance <= 5) {  // situation 3
+      if (ultraDistance < 6) {
         nudgeRight();
+      } else if (ultraDistance > 8) {
+        int irReading = readIR();
+        if (irReading > IR_TOO_NEAR) {
+          nudgeLeft();
+        } else {
+          moveForward();
+        }
+      } else {
+        moveForward();
       }
     }
   }

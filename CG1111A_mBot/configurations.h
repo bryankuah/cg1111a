@@ -3,10 +3,10 @@
 #define TURN_90_DELAY 550
 #define ONE_WALL_DELAY 800
 
-#define L_B_R_B (0x00) // left black, right black
-#define L_B_R_W (0x01) // left black, right white
-#define L_W_R_B (0x02) // left white, right black
-#define L_W_R_W (0x03) // left white, right white
+#define L_B_R_B (0x00)  // left black, right black
+#define L_B_R_W (0x01)  // left black, right white
+#define L_W_R_B (0x02)  // left white, right black
+#define L_W_R_W (0x03)  // left white, right white
 
 // COLOUR SENSOR
 #define CS_INA A0
@@ -18,9 +18,13 @@
 #define CS_LED_B 3
 #define CS_LDR_PIN A2
 
-#define CS_SAMPLES 10
-#define CS_DELAY_BEFORE_READING 100
-#define CS_THRESHOLD 200
+#define CS_SAMPLES 100
+#define CS_DELAY_BEFORE_READING 1000
+#define CS_THRESHOLD 1000
+
+#define IR_READ_PIN A3
+
+#define IR_TOO_NEAR 57  // too near when greater than this value
 
 #define ULTRA_TIMEOUT 30000
-#define SPEED_OF_SOUND 0.0343 // centimetre/microsecond
+#define SPEED_OF_SOUND 0.0343  // centimetre/microsecond
