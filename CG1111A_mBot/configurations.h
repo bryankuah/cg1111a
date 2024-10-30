@@ -18,9 +18,9 @@
 #define CS_LED_B 3
 #define CS_LDR_PIN A2
 
-#define CS_SAMPLES 100
-#define CS_DELAY_BEFORE_READING 1000
-#define CS_THRESHOLD 1000
+#define CS_SAMPLES 10
+#define CS_DELAY_BEFORE_READING 100
+#define CS_THRESHOLD 200
 
 #define ULTRA_TIMEOUT 30000
 #define SPEED_OF_SOUND 0.0343 // centimetre/microsecond
