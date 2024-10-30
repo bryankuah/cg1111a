@@ -18,9 +18,9 @@
 #define CS_LED_B 3
 #define CS_LDR_PIN A2
 
-#define CS_SAMPLES 100
-#define CS_DELAY_BEFORE_READING 1000
-#define CS_THRESHOLD 1000
+#define CS_SAMPLES 10
+#define CS_DELAY_BEFORE_READING 100
+#define CS_THRESHOLD 350
 
 #define IR_READ_PIN A3
 

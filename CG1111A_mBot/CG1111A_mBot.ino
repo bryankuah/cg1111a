@@ -11,8 +11,8 @@ float ultraDistance;
 String colours[] = { "blue", "green", "pink", "red", "white", "orange" };
 long rgb_values[3] = { 0, 0, 0 };
 
-long recorded_rgb_values[6][3] = { { 5070, 5800, 6200 }, { 5300, 5770, 5130 }, { 5200, 5100, 5200 }, { 5750, 3840, 3950 }, { 4800, 5200, 5300 }, { 5400, 4283, 3600 } };
 
+long recorded_rgb_values[6][3] = { { 6391, 7171, 5341 }, { 6542, 7112, 4611 }, { 6698, 7238, 5201 }, { 6707, 6690, 4245 }, { 6700, 7539, 5650 }, { 6750, 6910, 4310 } };
 int num_colours = sizeof(recorded_rgb_values) / sizeof(recorded_rgb_values[0]);
 // static_assert(num_colours == 6, "Number of colours must be 6");
 
@@ -87,11 +87,11 @@ int readIR() {
   delay(50);
   int shineValue = analogRead(IR_READ_PIN);
   enablePin(3);
-  Serial.print(ambientValue);
-  Serial.print(" ");
-  Serial.print(shineValue);
-  Serial.print(" ");
-  Serial.println(shineValue - ambientValue);
+  // Serial.print(ambientValue);
+  // Serial.print(" ");
+  // Serial.print(shineValue);
+  // Serial.print(" ");
+  // Serial.println(shineValue - ambientValue);
   return shineValue - ambientValue;
 }
 
@@ -211,9 +211,6 @@ void setup() {
   Serial.begin(9600);   // Setup serial monitor for debugging purpose
   setupColourSensor();  // Setup colour sensor
   setupIRSensor();
-  // while (1) {
-  //   readIR();
-  // }
 }
 
 int colour_index = 0;
@@ -237,6 +234,7 @@ void loop() {
       stopMotor();
       detectColour(led_pins, rgb_values);
       int col = identifyColours(rgb_values);
+      Serial.println(colours[col]);
       if (colours[col] == "pink") {
         doubleLeftTurn();
       } else if (colours[col] == "blue") {
