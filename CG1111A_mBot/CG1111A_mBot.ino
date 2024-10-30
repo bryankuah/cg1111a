@@ -8,6 +8,7 @@ MeDCMotor rightMotor(M2);                // assigning RightMotor to port M2
 int status = false;                      // global status; 0 = do nothing, 1 = mBot runs
 float ultraDistance;
 
+String colours[] = {"blue", "green", "pink", "red", "white", "orange"};
 long rgb_values[3] = { 0, 0, 0 };
 long recorded_rgb_values[6][3] = {
   { 0, 0, 0 },  // blue
@@ -17,6 +18,8 @@ long recorded_rgb_values[6][3] = {
   { 0, 0, 0 },  // white
   { 0, 0, 0 }   // orange
 };
+int num_colours = sizeof(recorded_rgb_values) / sizeof(recorded_rgb_values[0]);
+static_assert(num_colours == 6, "Number of colours must be 6");
 
 int led_pins[3] = { CS_LED_R, CS_LED_G, CS_LED_B };
 
@@ -133,14 +136,25 @@ int detectColour(int led_pins[3], long rgb_values[3])
   enablePin(CS_LED_OFF);
 }
 
-void identifyColours(long rgb_vals[3])
+int identifyColours(long rgb_vals[3])
 {
+  for(int i = 0; i < num_colours; i++)
+  {
+    for(int j = 0; j < 3; j++)
+    {
+      if (abs(rgb_vals[j] - recorded_rgb_values[i][j]) > CS_THRESHOLD)
+      {
+        break;
+      }
+    }
+    return i;
+  }
+  return -1;
 }
 
 // will not be ran in the final code
 void calibrateColourSensor()
 {
-  String colours[] = {"blue", "green", "pink", "red", "white", "orange"};
   long rgb_values[3];
 
   for (int i = 0; i < 6; i++)
@@ -168,10 +182,20 @@ void setup() {
   Serial.begin(9600);   // Setup serial monitor for debugging purpose
   setupColourSensor();  // Setup colour sensor
 }
+
+int colour_index = 0;
 void loop() {
   if (analogRead(A7) < 100) {  // If push button is pushed, the value will be very low
     status = !status;          // Toggle status
     delay(500);                // Delay 500ms so that a button push won't be counted multiple times.
+    readColour(rgb_values);
+    colour_index = identifyColours(rgb_values);
+    if (colour_index != -1)
+    {
+      Serial.println("Colour detected: " + String(colours[colour_index]));
+    } else {
+      Serial.println("Colour not detected");
+    }
   }
   if (status) {                                  // run mBot only if status is 1
     int sensorState = lineFinder.readSensors();  // read the line sensor's state
