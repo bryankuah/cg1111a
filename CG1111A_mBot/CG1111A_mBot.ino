@@ -9,6 +9,15 @@ int status = false;                      // global status; 0 = do nothing, 1 = m
 float ultraDistance;
 
 long rgb_values[3] = { 0, 0, 0 };
+long recorded_rgb_values[6][3] = {
+  { 0, 0, 0 },  // blue
+  { 0, 0, 0 },  // green
+  { 0, 0, 0 },  // pink
+  { 0, 0, 0 },  // red
+  { 0, 0, 0 },  // white
+  { 0, 0, 0 }   // orange
+};
+
 int led_pins[3] = { CS_LED_R, CS_LED_G, CS_LED_B };
 
 // Code for playing celebratory tune
@@ -64,15 +73,18 @@ void nudgeRight() {
 // Code for turning on the IR emitter only
 void shineIR() {}
 
-int readLDR() {
-  return analogRead(CS_LDR_PIN);
-}
 // Code for stopping motor
 void stopMotor() {
   leftMotor.stop();
   rightMotor.stop();
 }
 
+
+// Colour sensor codes
+
+int readLDR() {
+  return analogRead(CS_LDR_PIN);
+}
 void setupColourSensor() {
   pinMode(CS_INA, OUTPUT);
   pinMode(CS_INB, OUTPUT);
@@ -107,39 +119,49 @@ void enablePin(int pin_number) {
   }
 }
 
-float readUltraDistance() {
-  return ultraSensor.distanceCm() - 4;
-}
-
-int detectColour(int led_pins[3], long rgb_values[3]) {
-  for (int i = 0; i < 3; i++) {
+int detectColour(int led_pins[3], long rgb_values[3])
+{
+  long ambient_light = 0;
+  readColour(&ambient_light);
+  for (int i = 0; i < 3; i++)
+  {
     enablePin(led_pins[i]);
     delay(CS_DELAY_BEFORE_READING);
     readColour(rgb_values + i);
+    rgb_values[i] -= ambient_light;
   }
   enablePin(CS_LED_OFF);
 }
 
-void identifyColours(long rgb_vals[3]) {
+void identifyColours(long rgb_vals[3])
+{
 }
 
 // will not be ran in the final code
-void calibrateColourSensor() {
-  String colours[] = { "blue", "green", "pink", "red", "white", "orange" };
+void calibrateColourSensor()
+{
+  String colours[] = {"blue", "green", "pink", "red", "white", "orange"};
   long rgb_values[3];
 
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; i++)
+  {
     Serial.println("Place the sensor on " + colours[i] + " colour");
     delay(5000);
     detectColour(led_pins, rgb_values);
     Serial.print("RGB values: ");
-    for (int j = 0; j < 3; j++) {
+    for (int j = 0; j < 3; j++)
+    {
       Serial.print(rgb_values[j]);
       Serial.print(" ");
     }
     Serial.println();
   }
 }
+
+float readUltraDistance() {
+  return ultraSensor.distanceCm() - 4;
+}
+
 
 void setup() {
   pinMode(A7, INPUT);   // Setup A7 as input for the push button
