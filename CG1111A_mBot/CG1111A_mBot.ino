@@ -7,15 +7,10 @@ MeUltrasonicSensor ultraSensor(PORT_1);  // assigning ultraSensor to RJ25 port 1
 MeLineFollower lineFinder(PORT_2);       // assigning lineFinder to RJ25 port 2
 MeDCMotor leftMotor(M1);                 // assigning leftMotor to port M1
 MeDCMotor rightMotor(M2);                // assigning RightMotor to port M2
+MeRGBLed led(0,30);
+
 int status = false;                      // global status; 0 = do nothing, 1 = mBot runs
 float ultraDistance;
-
-String colours[] = { "blue", "green", "pink", "red", "white", "orange" };
-long rgb_values[3] = { 0, 0, 0 };
-
-
-long recorded_rgb_values[6][3] = { { 6391, 7171, 5341 }, { 6542, 7112, 4611 }, { 6698, 7238, 5201 }, { 6707, 6690, 4245 }, { 6700, 7539, 5650 }, { 6750, 6910, 4310 } };
-int num_colours = sizeof(recorded_rgb_values) / sizeof(recorded_rgb_values[0]);
 
 int led_pins[3] = { CS_LED_R, CS_LED_G, CS_LED_B };
 ColourSensor colourSensor(CS_INA, CS_INB, CS_LDR_PIN, led_pins);
@@ -103,13 +98,6 @@ void stopMotor() {
   rightMotor.stop();
 }
 
-
-// Colour sensor codes
-
-int readLDR() {
-  return analogRead(CS_LDR_PIN);
-}
-
 void setupIRSensor() {
   pinMode(IR_READ_PIN, INPUT);
 }
@@ -118,48 +106,53 @@ float readUltraDistance() {
   return ultraSensor.distanceCm() - 4;
 }
 
-void setup() {
-  pinMode(A7, INPUT);   // Setup A7 as input for the push button
-  Serial.begin(9600);   // Setup serial monitor for debugging purpose
-  colourSensor.setup(); // Setup colour sensor
-  setupIRSensor();
+void colour_move(int col) {
+  if(col == CS_BLUE){
+    led.setColor(0,0,255);
+    doubleRightTurn();
+  } else if(col == CS_GREEN){
+    led.setColor(0,255,0);
+    doubleLeftTurn();
+  } else if(col == CS_PINK){
+    led.setColor(255,0,255);
+    stopMotor();
+  } else if(col == CS_RED){
+    led.setColor(255,0,0);
+    turnLeft();
+  } else if(col == CS_WHITE){
+    led.setColor(255,255,255);
+    turnRight();
+  } else if(col == CS_ORANGE){
+    led.setColor(255,165,0);
+    uTurn();
+  }
+  led.setColor(0,0,0);
 }
 
-int colour_index = 0;
+void setup() {
+  Serial.begin(9600);   // Setup serial monitor for debugging purpose
+  pinMode(A7, INPUT);   // Setup A7 as input for the push button
+  led.setpin(13);
+  colourSensor.setup(); // Setup colour sensor
+  setupIRSensor();
+  led.setColor(255,0,0);
+}
+
 void loop() {
   if (analogRead(A7) < 100) {  // If push button is pushed, the value will be very low
     status = !status;          // Toggle status
+    if(status) {led.setColor(0,0,0);}
+    else {led.setColor(255,0,0);}
     delay(500);                // Delay 500ms so that a button push won't be counted multiple times.
-    // readColour(rgb_values);
-    // colour_index = identifyColours(rgb_values);
-    // if (colour_index != -1)
-    // {
-    //   Serial.println("Colour detected: " + String(colours[colour_index]));
-    // } else {
-    //   Serial.println("Colour not detected");
-    // }
   }
   if (status) {                                  // run mBot only if status is 1
     int sensorState = lineFinder.readSensors();  // read the line sensor's state
     // Serial.println(sensorState);
     if (sensorState == L_B_R_B) {  // situation 4
       stopMotor();
-      colourSensor.detectColour(rgb_values);
-      int col = colourSensor.identifyColours(rgb_values);
-      Serial.println(colours[col]);
-      if (colours[col] == "pink") {
-        doubleLeftTurn();
-      } else if (colours[col] == "blue") {
-        doubleRightTurn();
-      } else if (colours[col] == "white") {
-        stopMotor();
-      } else if (colours[col] == "red") {
-        turnLeft();
-      } else if (colours[col] == "green") {
-        turnRight();
-      } else if (colours[col] == "orange") {
-        uTurn();
-      }
+      colourSensor.detectColour();
+      int col = colourSensor.identifyColours();
+      colour_move(col);
     } else if (sensorState == L_B_R_W) {
       rightWheelForwardOnly();
     } else if (sensorState == L_W_R_B) {

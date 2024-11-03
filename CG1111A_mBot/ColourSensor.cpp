@@ -25,7 +25,7 @@ void ColourSensor::readColour(long *colourValue) {
     }
 }
 
-int ColourSensor::detectColour(long rgb_values[3]) {
+void ColourSensor::detectColour() {
     long ambient_light = 0;
     readColour(&ambient_light);
     long reading = 0;
@@ -40,35 +40,38 @@ int ColourSensor::detectColour(long rgb_values[3]) {
         rgb_values[i] += reading;
     }
     enablePin(CS_LED_OFF);
-    delay(100);
-    return 0;
 }
 
-int ColourSensor::identifyColours(long rgb_vals[3]) {
-    int colour_idx;
-    int j;
-    for (colour_idx = 0; colour_idx < 6; colour_idx++) {
-        for (j = 0; j < 3; j++) {
-            Serial.print(abs(rgb_vals[j] - recorded_rgb_values[colour_idx][j]));
-            Serial.print(" ");
-            if (abs(rgb_vals[j] - recorded_rgb_values[colour_idx][j]) > CS_THRESHOLD) {
-                Serial.println();
-                break;
-            }
-        }
-        if (j == 3) {
-            return colour_idx;
+
+int ColourSensor::identifyColours() {
+    int best_match = -1;
+    long min_distance = 9999999;
+
+    for (int colour_idx = 0; colour_idx < 6; colour_idx++) {
+        long distance = calculateDistance(colour_idx);
+        if (distance < min_distance) {
+            min_distance = distance;
+            best_match = colour_idx;
         }
     }
-    return -1;
+
+    return (min_distance <= CS_THRESHOLD) ? best_match : -1;
+}
+
+long ColourSensor::calculateDistance(int colour_idx) {
+    long sum = 0;
+    for (int j = 0; j < 3; j++) {
+        int diff = rgb_vals[j] - recorded_rgb_values[colour_idx][j];
+        sum += diff * diff;
+    }
+    return sum;
 }
 
 void ColourSensor::calibrateColourSensor() {
-    long rgb_values[3];
     for (int i = 0; i < 6; i++) {
         Serial.println("Place the sensor on " + colours[i] + " colour");
         delay(5000);
-        detectColour(rgb_values);
+        detectColour();
         Serial.print("RGB values: ");
         for (int j = 0; j < 3; j++) {
             Serial.print(rgb_values[j]);

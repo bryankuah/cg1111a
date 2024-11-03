@@ -22,6 +22,16 @@
 #define CS_DELAY_BEFORE_READING 100
 #define CS_THRESHOLD 350
 
+// String colours[6] = { "blue", "green", "pink", "red", "white", "orange" };
+#define CS_BLUE 0
+#define CS_GREEN 1
+#define CS_PINK 2
+#define CS_RED 3
+#define CS_WHITE 4
+#define CS_ORANGE 5
+
+
+
 #define IR_READ_PIN A3
 
 #define IR_TOO_NEAR 57  // too near when greater than this value
