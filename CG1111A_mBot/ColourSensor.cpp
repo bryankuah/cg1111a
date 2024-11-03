@@ -1,17 +1,10 @@
 #include "ColourSensor.h"
 #include "configurations.h"
-ColourSensor::ColourSensor(int ina, int inb, int ldrPin, int ledPins[3]){
+ColourSensor::ColourSensor(int ldrPin, int ledPins[3]){
     for (int i = 0; i < 3; i++) {
         led_pins[i] = ledPins[i];
     }
-}
-
-void ColourSensor::setup() {
-    pinMode(CS_INA, OUTPUT);
-    pinMode(CS_INB, OUTPUT);
     pinMode(CS_LDR_PIN, INPUT);
-    digitalWrite(CS_INA, LOW);
-    digitalWrite(CS_INB, LOW);
 }
 
 int ColourSensor::readLDR() {
@@ -27,19 +20,17 @@ void ColourSensor::readColour(long *colourValue) {
 
 void ColourSensor::detectColour() {
     long ambient_light = 0;
+    setMuxOut(MUX_IR); // turn off all LEDs
     readColour(&ambient_light);
     long reading = 0;
+    
     for (int i = 0; i < 3; i++) {
-        rgb_values[i] = 0;
-    }
-    for (int i = 0; i < 3; i++) {
-        enablePin(led_pins[i]);
+        setMuxOut(led_pins[i]);
         delay(CS_DELAY_BEFORE_READING);
         readColour(&reading);
         reading -= ambient_light;
-        rgb_values[i] += reading;
+        rgb_values[i] = reading;
     }
-    enablePin(CS_LED_OFF);
 }
 
 

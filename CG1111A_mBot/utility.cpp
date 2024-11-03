@@ -1,25 +1,33 @@
 #include "utility.h"
 
-void enablePin(int pin_number)
+void setupMultiplexer()
+{
+    pinMode(MUX_INA, OUTPUT);
+    pinMode(MUX_INB, OUTPUT);
+    digitalWrite(MUX_INA, LOW);
+    digitalWrite(MUX_INB, LOW);
+}
+
+void setMuxOut(int pin_number)
 {
     if (pin_number == 0)
     {
-        digitalWrite(CS_INA, LOW);
-        digitalWrite(CS_INB, LOW);
+        digitalWrite(MUX_INA, LOW);
+        digitalWrite(MUX_INB, LOW);
     }
     else if (pin_number == 1)
     {
-        digitalWrite(CS_INA, HIGH);
-        digitalWrite(CS_INB, LOW);
+        digitalWrite(MUX_INA, HIGH);
+        digitalWrite(MUX_INB, LOW);
     }
     else if (pin_number == 2)
     {
-        digitalWrite(CS_INA, LOW);
-        digitalWrite(CS_INB, HIGH);
+        digitalWrite(MUX_INA, LOW);
+        digitalWrite(MUX_INB, HIGH);
     }
     else if (pin_number == 3)
     {
-        digitalWrite(CS_INA, HIGH);
-        digitalWrite(CS_INB, HIGH);
+        digitalWrite(MUX_INA, HIGH);
+        digitalWrite(MUX_INB, HIGH);
     }
 }

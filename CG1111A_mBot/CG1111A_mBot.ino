@@ -12,8 +12,8 @@ MeRGBLed led(0,30);
 int status = false;                      // global status; 0 = do nothing, 1 = mBot runs
 float ultraDistance;
 
-int led_pins[3] = { CS_LED_R, CS_LED_G, CS_LED_B };
-ColourSensor colourSensor(CS_INA, CS_INB, CS_LDR_PIN, led_pins);
+int led_pins[3] = { MUX_LED_R, MUX_LED_G, MUX_LED_B };
+ColourSensor colourSensor(CS_LDR_PIN, led_pins);
 
 // Code for playing celebratory tune
 void celebrate() {}
@@ -80,10 +80,10 @@ void leftWheelForwardOnly() {
 // Code for reading the IR
 int readIR() {
   int ambientValue = analogRead(IR_READ_PIN);
-  enablePin(0);
+  setMuxOut(MUX_LED_B); // Turn off IR Emitter
   delay(50);
   int shineValue = analogRead(IR_READ_PIN);
-  enablePin(3);
+  setMuxOut(MUX_IR);
   // Serial.print(ambientValue);
   // Serial.print(" ");
   // Serial.print(shineValue);
@@ -133,7 +133,6 @@ void setup() {
   Serial.begin(9600);   // Setup serial monitor for debugging purpose
   pinMode(A7, INPUT);   // Setup A7 as input for the push button
   led.setpin(13);
-  colourSensor.setup(); // Setup colour sensor
   setupIRSensor();
   led.setColor(255,0,0);
 }

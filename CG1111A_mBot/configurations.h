@@ -8,14 +8,16 @@
 #define L_W_R_B (0x02)  // left white, right black
 #define L_W_R_W (0x03)  // left white, right white
 
-// COLOUR SENSOR
-#define CS_INA A0
-#define CS_INB A1
+// Multiplexer
+#define MUX_INA A0
+#define MUX_INB A1
 
-#define CS_LED_OFF 0
-#define CS_LED_R 1
-#define CS_LED_G 2
-#define CS_LED_B 3
+#define MUX_IR 0
+#define MUX_LED_R 1
+#define MUX_LED_G 2
+#define MUX_LED_B 3
+
+// COLOUR SENSOR
 #define CS_LDR_PIN A2
 
 #define CS_SAMPLES 10
@@ -30,10 +32,7 @@
 #define CS_WHITE 4
 #define CS_ORANGE 5
 
-
-
 #define IR_READ_PIN A3
-
 #define IR_TOO_NEAR 57  // too near when greater than this value
 
 #define ULTRA_TIMEOUT 30000

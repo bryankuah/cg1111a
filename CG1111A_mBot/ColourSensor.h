@@ -7,7 +7,7 @@
 
 class ColourSensor {
 public:
-    ColourSensor(int ina, int inb, int ldrPin, int ledPins[3]);
+    ColourSensor(int ldrPin, int ledPins[3]);
     void setup();
     void detectColour();
     int getRGBValues(long rgb_values[3]);

@@ -3,5 +3,5 @@
 
 #include <Arduino.h>
 #include "configurations.h"
-void enablePin(int pin_number);
+void setMuxOut(int pin_number);
 #endif // UTILITY_H
