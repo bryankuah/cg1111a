@@ -12,7 +12,7 @@ MeRGBLed led(0,30);
 int status = false;                      // global status; 0 = do nothing, 1 = mBot runs
 float ultraDistance;
 
-int led_pins[3] = { MUX_LED_R, MUX_LED_G, MUX_LED_B };
+int led_pins[NUM_COMPONENTS] = { MUX_LED_R, MUX_LED_G, MUX_LED_B };
 ColourSensor colourSensor(CS_LDR_PIN, led_pins);
 
 // Code for playing celebratory tune
