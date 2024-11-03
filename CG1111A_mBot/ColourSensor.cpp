@@ -22,6 +22,7 @@ void ColourSensor::_readColour(long *colourValue) {
 void ColourSensor::detectColour() {
     long ambient_light = 0;
     setMuxOut(MUX_IR); // turn off all LEDs
+    delay(CS_DELAY_BEFORE_READING);
     _readColour(&ambient_light);
     long reading = 0;
 
