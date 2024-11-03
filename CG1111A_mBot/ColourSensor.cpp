@@ -34,7 +34,7 @@ void ColourSensor::detectColour() {
     }
 
     // Normalize the values
-    float sum = 0;
+    double sum = 0;
     for (int i = 0; i < NUM_COMPONENTS; i++) {
         sum += _rgb_vals[i];
     }
@@ -46,8 +46,8 @@ void ColourSensor::detectColour() {
 
 int ColourSensor::identifyColours() {
     int best_match = -1;
-    float min_distance = 9999999;
-    float distance;
+    double min_distance = 9999999;
+    double distance;
 
     for (int colour_idx = 0; colour_idx < NUM_COLOURS; colour_idx++) {
         distance = _calculateDistance(colour_idx);
@@ -60,8 +60,8 @@ int ColourSensor::identifyColours() {
     return (min_distance <= CS_THRESHOLD) ? best_match : -1;
 }
 
-float ColourSensor::_calculateDistance(int colour_idx) {
-    float sum = 0;
+double ColourSensor::_calculateDistance(int colour_idx) {
+    double sum = 0;
     for (int i = 0; i < NUM_COMPONENTS; i++) {
         sum += pow(_rgb_vals[i] - _recorded_rgb_values[colour_idx][i], 2);
     }

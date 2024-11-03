@@ -20,10 +20,10 @@ private:
     int _ina; int _inb; int _ldrPin;
     int _led_pins[NUM_COMPONENTS];
     void _readColour(long *colourValue);
-    float _calculateDistance(int colour_idx);
+    double _calculateDistance(int colour_idx);
     int _readLDR();
-    float _rgb_vals[NUM_COMPONENTS];
-    float _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
+    double _rgb_vals[NUM_COMPONENTS];
+    double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
         { 6391, 7171, 5341 },
         { 6542, 7112, 4611 },
         { 6698, 7238, 5201 },
