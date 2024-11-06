@@ -23,15 +23,16 @@ private:
     double _calculateDistance(int colour_idx);
     int _readLDR();
     double _rgb_vals[NUM_COMPONENTS];
-    double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
-                            {0.37, 0.35, 0.29},
-                            {0.39, 0.36, 0.26},
-                            {0.38, 0.35, 0.27},
-                            {0.43, 0.35, 0.22},
-                            {0.36, 0.36, 0.29},
-                            {0.42, 0.36, 0.22}};
 
-    String _colours[NUM_COLOURS] = { "blue", "green", "pink", "red", "white", "orange" };
+    double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
+                            {0.357690, 0.345871, 0.296439},
+                            {0.371094, 0.359107, 0.269799},
+                            {0.368199, 0.348862, 0.282939},
+                            {0.416583, 0.336377, 0.247040},
+                            {0.349495, 0.357862, 0.292643},
+                            {0.406310, 0.349920, 0.243770}};
+
+        String _colours[NUM_COLOURS] = {"blue", "green", "pink", "red", "white", "orange"};
 };
 
 #endif // COLOUR_SENSOR_H

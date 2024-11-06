@@ -73,11 +73,11 @@ double ColourSensor::_calculateDistance(int colour_idx) {
 void ColourSensor::calibrateColourSensor() {
     for (int i = 0; i < NUM_COLOURS; i++) {
         Serial.println("Place the sensor on " + _colours[i] + " colour");
-        delay(5000);
+        delay(10000);
         detectColour();
         Serial.print("RGB values: ");
         for (int j = 0; j < NUM_COMPONENTS; j++) {
-            Serial.print(_rgb_vals[j]);
+            Serial.print(_rgb_vals[j], 6);
             Serial.print(" ");
         }
         Serial.println();

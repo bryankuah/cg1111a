@@ -109,24 +109,31 @@ float readUltraDistance() {
 void colour_move(int col) {
   if(col == CS_BLUE){
     led.setColor(0,0,255);
+    led.show();
     doubleRightTurn();
   } else if(col == CS_GREEN){
     led.setColor(0,255,0);
+    led.show();
     turnRight();
   } else if(col == CS_PINK){
     led.setColor(255,0,255);
+    led.show();
     doubleLeftTurn();
   } else if(col == CS_RED){
     led.setColor(255,0,0);
+    led.show();
     turnLeft();
   } else if(col == CS_WHITE){
     led.setColor(255,255,255);
+    led.show();
     stopMotor();
   } else if(col == CS_ORANGE){
     led.setColor(255,165,0);
+    led.show();
     uTurn();
   }
   led.setColor(0,0,0);
+  led.show();
 }
 
 void setup() {
@@ -136,6 +143,7 @@ void setup() {
   setupMultiplexer();
   setupIRSensor();
   led.setColor(255,0,0);
+  led.show();
   // colourSensor.calibrateColourSensor();
 }
 
@@ -144,6 +152,7 @@ void loop() {
     status = !status;          // Toggle status
     if(status) {led.setColor(0,0,0);}
     else {led.setColor(255,0,0);}
+    led.show();
     stopMotor();
     delay(500);                // Delay 500ms so that a button push won't be counted multiple times.
   }
