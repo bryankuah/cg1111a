@@ -194,7 +194,7 @@ void setup() {
   led.setColor(255, 0, 0);
   led.show();
   buzzer.setpin(BUZZER_PIN);
-  buzzer.tone(130, 2000);
+  buzzer.tone(130, 500);
   // colourSensor.calibrateColourSensor();
 }
 
