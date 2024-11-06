@@ -1,5 +1,6 @@
 #pragma once
 
+#define FAST_SPEED 255
 #define TURN_90_DELAY 520
 #define ONE_WALL_DELAY 750
 
@@ -21,7 +22,7 @@
 #define CS_LDR_PIN A2
 
 #define CS_SAMPLES 50
-#define CS_DELAY_BEFORE_READING 100
+#define CS_DELAY_BEFORE_READING 250
 #define CS_THRESHOLD 350
 
 // String colours[6] = { "blue", "green", "pink", "red", "white", "orange" };
@@ -37,3 +38,19 @@
 
 #define ULTRA_TIMEOUT 30000
 #define SPEED_OF_SOUND 0.0343  // centimetre/microsecond
+
+#define BUZZER_PIN 8
+
+// Define the note frequencies (in Hz) for the first few bars of "Moonlight Sonata"
+#define note_C3 130   // C3 (bass)
+#define note_G3 196   // G3 (bass)
+#define note_Eb4 311  // Eb4 (melody)
+#define note_G4 392   // G4 (melody)
+#define note_C4 261   // C4 (melody)
+#define note_F4 349   // F4 (melody)
+#define note_A4 440   // A4 (melody)
+
+// Define the delay times for rhythm (in milliseconds)
+#define longDelay 500  // Long note duration (half beat)
+#define shortDelay 250 // Short note duration (quarter beat)
+#define pause 100      // Short pause between phrases
