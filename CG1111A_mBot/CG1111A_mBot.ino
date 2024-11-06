@@ -165,9 +165,9 @@ void loop() {
         nudgeRight();
       } else if (ultraDistance > 8) {
         int irReading = readIR();
+        // stopMotor();
         Serial.println(irReading);
         if (irReading > IR_TOO_NEAR) {
-          
           nudgeLeft();
         } else {
           moveForward();

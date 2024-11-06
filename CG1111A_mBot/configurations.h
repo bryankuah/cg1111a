@@ -1,7 +1,7 @@
 #pragma once
 
-#define TURN_90_DELAY 550
-#define ONE_WALL_DELAY 800
+#define TURN_90_DELAY 520
+#define ONE_WALL_DELAY 750
 
 #define L_B_R_B (0x00)  // left black, right black
 #define L_B_R_W (0x01)  // left black, right white
@@ -33,7 +33,7 @@
 #define CS_ORANGE 5
 
 #define IR_READ_PIN A3
-#define IR_TOO_NEAR 57  // too near when greater than this value
+#define IR_TOO_NEAR 78  // too near when greater than this value
 
 #define ULTRA_TIMEOUT 30000
 #define SPEED_OF_SOUND 0.0343  // centimetre/microsecond
