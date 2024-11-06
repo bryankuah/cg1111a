@@ -12,7 +12,7 @@ int ColourSensor::_readLDR() {
     return analogRead(_ldrPin);
 }
 
-void ColourSensor::_readColour(long *colourValue) {
+void ColourSensor::_readColour(double *colourValue) {
     *colourValue = 0;
     for (int i = CS_SAMPLES; i > 0; i--) {
         *colourValue += analogRead(_ldrPin);
@@ -20,18 +20,19 @@ void ColourSensor::_readColour(long *colourValue) {
 }
 
 void ColourSensor::detectColour() {
-    long ambient_light = 0;
+    double ambient_light = 0;
     setMuxOut(MUX_IR); // turn off all LEDs
     delay(CS_DELAY_BEFORE_READING);
     _readColour(&ambient_light);
-    long reading = 0;
 
     for (int i = 0; i < NUM_COMPONENTS; i++) {
+        double reading = 0;
         setMuxOut(_led_pins[i]);
         delay(CS_DELAY_BEFORE_READING);
         _readColour(&reading);
         reading -= ambient_light;
         _rgb_vals[i] = reading;
+        // Serial.println(reading)
     }
 
     // Normalize the values

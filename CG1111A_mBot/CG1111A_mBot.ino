@@ -89,7 +89,7 @@ int readIR() {
   // Serial.print(shineValue);
   // Serial.print(" ");
   // Serial.println(shineValue - ambientValue);
-  return shineValue - ambientValue;
+  return -(shineValue - ambientValue);
 }
 
 // Code for stopping motor
@@ -112,16 +112,16 @@ void colour_move(int col) {
     doubleRightTurn();
   } else if(col == CS_GREEN){
     led.setColor(0,255,0);
-    doubleLeftTurn();
+    turnRight();
   } else if(col == CS_PINK){
     led.setColor(255,0,255);
-    stopMotor();
+    doubleLeftTurn();
   } else if(col == CS_RED){
     led.setColor(255,0,0);
     turnLeft();
   } else if(col == CS_WHITE){
     led.setColor(255,255,255);
-    turnRight();
+    stopMotor();
   } else if(col == CS_ORANGE){
     led.setColor(255,165,0);
     uTurn();
@@ -133,8 +133,10 @@ void setup() {
   Serial.begin(9600);   // Setup serial monitor for debugging purpose
   pinMode(A7, INPUT);   // Setup A7 as input for the push button
   led.setpin(13);
+  setupMultiplexer();
   setupIRSensor();
   led.setColor(255,0,0);
+  // colourSensor.calibrateColourSensor();
 }
 
 void loop() {
@@ -142,6 +144,7 @@ void loop() {
     status = !status;          // Toggle status
     if(status) {led.setColor(0,0,0);}
     else {led.setColor(255,0,0);}
+    stopMotor();
     delay(500);                // Delay 500ms so that a button push won't be counted multiple times.
   }
   if (status) {                                  // run mBot only if status is 1
@@ -162,7 +165,9 @@ void loop() {
         nudgeRight();
       } else if (ultraDistance > 8) {
         int irReading = readIR();
+        Serial.println(irReading);
         if (irReading > IR_TOO_NEAR) {
+          
           nudgeLeft();
         } else {
           moveForward();

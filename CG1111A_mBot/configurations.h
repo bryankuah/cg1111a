@@ -21,7 +21,7 @@
 #define CS_LDR_PIN A2
 
 #define CS_SAMPLES 10
-#define CS_DELAY_BEFORE_READING 100
+#define CS_DELAY_BEFORE_READING 1000
 #define CS_THRESHOLD 350
 
 // String colours[6] = { "blue", "green", "pink", "red", "white", "orange" };

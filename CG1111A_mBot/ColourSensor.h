@@ -19,18 +19,18 @@ public:
 private:
     int _ina; int _inb; int _ldrPin;
     int _led_pins[NUM_COMPONENTS];
-    void _readColour(long *colourValue);
+    void _readColour(double *colourValue);
     double _calculateDistance(int colour_idx);
     int _readLDR();
     double _rgb_vals[NUM_COMPONENTS];
     double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
-        { 6391, 7171, 5341 },
-        { 6542, 7112, 4611 },
-        { 6698, 7238, 5201 },
-        { 6707, 6690, 4245 },
-        { 6700, 7539, 5650 },
-        { 6750, 6910, 4310 }
-    };
+                            {0.37, 0.35, 0.29},
+                            {0.39, 0.36, 0.26},
+                            {0.38, 0.35, 0.27},
+                            {0.43, 0.35, 0.22},
+                            {0.36, 0.36, 0.29},
+                            {0.42, 0.36, 0.22}};
+
     String _colours[NUM_COLOURS] = { "blue", "green", "pink", "red", "white", "orange" };
 };
 
