@@ -13,11 +13,13 @@ MeBuzzer buzzer;
 int status = false;  // global status; 0 = do nothing, 1 = mBot runs
 float ultraDistance;
 
+#ifdef PID
 // PID constants
 float Kp = 1.0;
 float Kd = 0.1;
 float previous_error = 0;
 float setpoint = 7.0; // Desired distance
+#endif
 
 int led_pins[NUM_COMPONENTS] = { MUX_LED_R, MUX_LED_G, MUX_LED_B };
 ColourSensor colourSensor(CS_LDR_PIN, led_pins);

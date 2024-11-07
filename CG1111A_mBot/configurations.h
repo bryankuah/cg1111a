@@ -1,5 +1,7 @@
 #pragma once
 
+#define PID
+
 #define FAST_SPEED 255
 #define TURN_90_DELAY 520
 #define ONE_WALL_DELAY 750
