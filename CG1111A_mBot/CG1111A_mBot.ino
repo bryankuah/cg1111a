@@ -14,8 +14,8 @@ float ultraDistance;
 
 #ifdef PID
 // PID constants
-float Kp = 1.0;
-float Kd = 0.1;
+float Kp = 0.3;
+float Kd = 0.02;
 float previous_error = 0;
 float setpoint = 7.0; // Desired distance
 #endif
@@ -84,7 +84,8 @@ int readIR() {
   // Serial.print(" ");
   // Serial.print(shineValue);
   // Serial.print(" ");
-  // Serial.println(shineValue - ambientValue);
+  // Serial.println(-(shineValue - ambientValue));
+
   return -(shineValue - ambientValue);
 }
 
@@ -109,7 +110,7 @@ void turnLeft() {
 void uTurn() {
   leftMotor.run(FAST_SPEED);   // Left wheel goes backward (clockwise)
   rightMotor.run(FAST_SPEED);  // Right wheel goes backward (clockwise)
-  delay(2 * TURN_90_DELAY);
+  delay(TURN_180_DELAY);
 }
 // Code for double left turn
 void doubleLeftTurn() {
@@ -201,9 +202,9 @@ void setup() {
   setupIRSensor();
   led.setColor(255, 0, 0);
   led.show();
-  buzzer.setpin(BUZZER_PIN);
+  // buzzer.setpin(BUZZER_PIN);
   buzzer.tone(130, 500);
-  // colourSensor.calibrateColourSensor();
+  colourSensor.calibrateColourSensor(); 
 }
 
 void loop() {
@@ -237,7 +238,6 @@ void loop() {
       } else if (ultraDistance > 8) {
         int irReading = readIR();
         // stopMotor();
-        Serial.println(irReading);
         if (irReading > IR_TOO_NEAR) {
           nudgeLeft();
         } else {

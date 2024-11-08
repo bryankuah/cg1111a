@@ -24,16 +24,17 @@ private:
     int _readLDR();
     double _rgb_vals[NUM_COMPONENTS];
 
-    double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
-                            {0.357690, 0.345871, 0.296439},
-                            {0.371094, 0.359107, 0.269799},
-                            {0.368199, 0.348862, 0.282939},
-                            {0.416583, 0.336377, 0.247040},
-                            {0.349495, 0.357862, 0.292643},
-                            {0.406310, 0.349920, 0.243770}};
-
-        String _colours[NUM_COLOURS] = {"blue", "green", "pink", "red", "white", "orange"};
+    String _colours[NUM_COLOURS] = {"blue", "green", "pink", "red", "white", "orange"};
+   double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
+        {0.3405449, 0.3297276, 0.3297276},
+        {0.3438472, 0.3303915, 0.3257612},
+        {0.3434557, 0.3297171, 0.3268272},
+        {0.3498458, 0.3232078, 0.3269464},
+        {0.3408718, 0.3325139, 0.3266143},
+        {0.3481116, 0.3264047, 0.3254837}};
 };
+
+        //3.5cm
 
 #endif // COLOUR_SENSOR_H
 

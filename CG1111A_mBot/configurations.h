@@ -1,10 +1,11 @@
 #pragma once
 
-#define PID
+// #define PID
 
-#define FAST_SPEED 255
-#define TURN_90_DELAY 520
-#define ONE_WALL_DELAY 750
+#define FAST_SPEED 200
+#define TURN_90_DELAY 400
+#define TURN_180_DELAY 650
+#define ONE_WALL_DELAY 800
 
 #define L_B_R_B (0x00)  // left black, right black
 #define L_B_R_W (0x01)  // left black, right white
@@ -24,7 +25,7 @@
 #define CS_LDR_PIN A2
 
 #define CS_SAMPLES 50
-#define CS_DELAY_BEFORE_READING 250
+#define CS_DELAY_BEFORE_READING 300
 #define CS_THRESHOLD 350
 
 // String colours[6] = { "blue", "green", "pink", "red", "white", "orange" };
