@@ -2,10 +2,12 @@
 
 // #define PID
 
+#define SLOW_SPEED 70
+#define MID_SPEED 150
 #define FAST_SPEED 200
-#define TURN_90_DELAY 400
-#define TURN_180_DELAY 650
-#define ONE_WALL_DELAY 800
+#define TURN_90_DELAY 520
+#define TURN_180_DELAY 720
+#define ONE_WALL_DELAY 850
 
 #define L_B_R_B (0x00)  // left black, right black
 #define L_B_R_W (0x01)  // left black, right white

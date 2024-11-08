@@ -26,7 +26,6 @@ ColourSensor colourSensor(CS_LDR_PIN, led_pins);
 // Code for playing celebratory tune
 void celebrate() {
   // Simplified bass line and melody from Moonlight Sonata
-
   // Bass Line (arpeggio-style)
   buzzer.tone(note_C3, longDelay);  // C3
   delay(longDelay);                 // Wait for note duration
@@ -96,14 +95,14 @@ void moveForward() {
 }
 // Code for turning right 90 deg
 void turnRight() {
-  leftMotor.run(-FAST_SPEED);   // Left wheel goes forward (anti-clockwise)
-  rightMotor.run(-FAST_SPEED);  // Right wheel goes backward (anti-clockwise)
+  leftMotor.run(-MID_SPEED);   // Left wheel goes forward (anti-clockwise)
+  rightMotor.run(-MID_SPEED);  // Right wheel goes backward (anti-clockwise)
   delay(TURN_90_DELAY);
 }
 // Code for turning left 90 deg
 void turnLeft() {
-  leftMotor.run(FAST_SPEED);   // Left wheel goes backward (clockwise)
-  rightMotor.run(FAST_SPEED);  // Right wheel goes forward (clockwise)
+  leftMotor.run(MID_SPEED);   // Left wheel goes backward (clockwise)
+  rightMotor.run(MID_SPEED);  // Right wheel goes forward (clockwise)
   delay(TURN_90_DELAY);
 }
 // Code for u-turn
@@ -129,14 +128,14 @@ void doubleRightTurn() {
 
 // Code for nudging slightly to the left for some short interval
 void nudgeLeft() {
-  leftMotor.run(-50);          // Left wheel stops
+  leftMotor.run(-SLOW_SPEED);          // Left wheel stops
   rightMotor.run(FAST_SPEED);  // Right wheel goes forward
 }
 
 // Code for nudging slightly to the right for some short interval
 void nudgeRight() {
   leftMotor.run(-FAST_SPEED);  // Left wheel goes forward
-  rightMotor.run(50);          // Right wheel slows down
+  rightMotor.run(SLOW_SPEED);          // Right wheel slows down
 }
 
 void rightWheelForwardOnly() {
@@ -204,7 +203,7 @@ void setup() {
   led.show();
   // buzzer.setpin(BUZZER_PIN);
   buzzer.tone(130, 500);
-  colourSensor.calibrateColourSensor(); 
+  // colourSensor.calibrateColourSensor(); 
 }
 
 void loop() {
@@ -224,6 +223,7 @@ void loop() {
     // Serial.println(sensorState);
     if (sensorState == L_B_R_B) {  // situation 4
       stopMotor();
+      delay(200);
       colourSensor.detectColour();
       int col = colourSensor.identifyColours();
       colour_move(col);
