@@ -1,8 +1,7 @@
-#include "MeMCore.h"
 #include "configurations.h"
 #include "ColourSensor.h"
 #include "utility.h"
-
+#include "MeMCore.h"
 MeUltrasonicSensor ultraSensor(PORT_1);  // assigning ultraSensor to RJ25 port 1
 MeLineFollower lineFinder(PORT_2);       // assigning lineFinder to RJ25 port 2
 MeDCMotor leftMotor(M1);                 // assigning leftMotor to port M1
@@ -73,6 +72,22 @@ void celebrate() {
   // Repeat the song to create a loop
   delay(1000);  // Wait before repeating the piece
 }
+
+// Code for reading the IR
+int readIR() {
+  int ambientValue = analogRead(IR_READ_PIN);
+  setMuxOut(MUX_LED_B);  // Turn off IR Emitter
+  delay(50);
+  int shineValue = analogRead(IR_READ_PIN);
+  setMuxOut(MUX_IR);
+  // Serial.print(ambientValue);
+  // Serial.print(" ");
+  // Serial.print(shineValue);
+  // Serial.print(" ");
+  // Serial.println(shineValue - ambientValue);
+  return -(shineValue - ambientValue);
+}
+
 // Code for moving forward for some short interval
 void moveForward() {
   leftMotor.run(-FAST_SPEED);  // Left wheel goes forward (anti-clockwise)
@@ -131,21 +146,6 @@ void rightWheelForwardOnly() {
 void leftWheelForwardOnly() {
   leftMotor.run(-FAST_SPEED);  // Left wheel goes forward
   rightMotor.run(0);           // Right wheel stops
-}
-
-// Code for reading the IR
-int readIR() {
-  int ambientValue = analogRead(IR_READ_PIN);
-  setMuxOut(MUX_LED_B);  // Turn off IR Emitter
-  delay(50);
-  int shineValue = analogRead(IR_READ_PIN);
-  setMuxOut(MUX_IR);
-  // Serial.print(ambientValue);
-  // Serial.print(" ");
-  // Serial.print(shineValue);
-  // Serial.print(" ");
-  // Serial.println(shineValue - ambientValue);
-  return -(shineValue - ambientValue);
 }
 
 // Code for stopping motor
@@ -250,8 +250,8 @@ void loop() {
         float output = Kp * error + Kd * derivative;
 
         // Adjust motor speeds based on PID output
-        leftMotor.run(output);
-        rightMotor.run(output);
+        // leftMotor.run(output);
+        // rightMotor.run(output);
         #else
         moveForward();
         #endif
