@@ -4,8 +4,11 @@ void setupMultiplexer()
 {
     pinMode(MUX_INA, OUTPUT);
     pinMode(MUX_INB, OUTPUT);
-    digitalWrite(MUX_INA, LOW);
-    digitalWrite(MUX_INB, LOW);
+    
+    for(int i =0; i<4;i++){
+      setMuxOut(i);
+      delay(500);
+    }
 }
 
 void setMuxOut(int pin_number)

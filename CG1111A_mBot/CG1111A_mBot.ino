@@ -17,7 +17,7 @@ float ultraDistance;
 float Kp = 0.3;
 float Kd = 0.02;
 float previous_error = 0;
-float setpoint = 7.0; // Desired distance
+float setpoint = 7.0;  // Desired distance
 #endif
 
 int led_pins[NUM_COMPONENTS] = { MUX_LED_R, MUX_LED_G, MUX_LED_B };
@@ -74,18 +74,21 @@ void celebrate() {
 
 // Code for reading the IR
 int readIR() {
-  int ambientValue = analogRead(IR_READ_PIN);
+  int ambientValue;
+  int shineValue;
   setMuxOut(MUX_LED_B);  // Turn off IR Emitter
-  delay(50);
-  int shineValue = analogRead(IR_READ_PIN);
+  delay(10);
+  ambientValue = analogRead(IR_READ_PIN);
   setMuxOut(MUX_IR);
+  delay(10);
+  shineValue = analogRead(IR_READ_PIN);
   // Serial.print(ambientValue);
   // Serial.print(" ");
   // Serial.print(shineValue);
   // Serial.print(" ");
   // Serial.println(-(shineValue - ambientValue));
 
-  return -(shineValue - ambientValue);
+  return shineValue - ambientValue;
 }
 
 // Code for moving forward for some short interval
@@ -98,44 +101,53 @@ void turnRight() {
   leftMotor.run(-MID_SPEED);   // Left wheel goes forward (anti-clockwise)
   rightMotor.run(-MID_SPEED);  // Right wheel goes backward (anti-clockwise)
   delay(TURN_90_DELAY);
+  stopMotor();
 }
 // Code for turning left 90 deg
 void turnLeft() {
   leftMotor.run(MID_SPEED);   // Left wheel goes backward (clockwise)
   rightMotor.run(MID_SPEED);  // Right wheel goes forward (clockwise)
   delay(TURN_90_DELAY);
+  stopMotor();
 }
 // Code for u-turn
 void uTurn() {
-  leftMotor.run(FAST_SPEED);   // Left wheel goes backward (clockwise)
-  rightMotor.run(FAST_SPEED);  // Right wheel goes backward (clockwise)
+  leftMotor.run(MID_SPEED);   // Left wheel goes backward (clockwise)
+  rightMotor.run(MID_SPEED);  // Right wheel goes backward (clockwise)
   delay(TURN_180_DELAY);
+  stopMotor();
 }
 // Code for double left turn
 void doubleLeftTurn() {
   turnLeft();
   moveForward();
   delay(ONE_WALL_DELAY);
+  stopMotor();
+  delay(SPEED_REVERSE_DELAY);
   turnLeft();
+  stopMotor();
 }
 // Code for double right turn
 void doubleRightTurn() {
   turnRight();
   moveForward();
   delay(ONE_WALL_DELAY);
+  stopMotor();
+  delay(SPEED_REVERSE_DELAY);
   turnRight();
+  stopMotor();
 }
 
 // Code for nudging slightly to the left for some short interval
 void nudgeLeft() {
-  leftMotor.run(-SLOW_SPEED);          // Left wheel stops
+  leftMotor.run(-SLOW_SPEED);  // Left wheel stops
   rightMotor.run(FAST_SPEED);  // Right wheel goes forward
 }
 
 // Code for nudging slightly to the right for some short interval
 void nudgeRight() {
   leftMotor.run(-FAST_SPEED);  // Left wheel goes forward
-  rightMotor.run(SLOW_SPEED);          // Right wheel slows down
+  rightMotor.run(SLOW_SPEED);  // Right wheel slows down
 }
 
 void rightWheelForwardOnly() {
@@ -179,11 +191,6 @@ void colour_move(int col) {
     led.setColor(255, 0, 0);
     led.show();
     turnLeft();
-  } else if (col == CS_WHITE) {
-    led.setColor(255, 255, 255);
-    led.show();
-    stopMotor();
-    celebrate();
   } else if (col == CS_ORANGE) {
     led.setColor(255, 165, 0);
     led.show();
@@ -203,7 +210,11 @@ void setup() {
   led.show();
   // buzzer.setpin(BUZZER_PIN);
   buzzer.tone(130, 500);
-  // colourSensor.calibrateColourSensor(); 
+  // while (1) {
+  //   Serial.println(readIR());
+  //   delay(50);
+  // }
+  // colourSensor.calibrateColourSensor();
 }
 
 void loop() {
@@ -218,6 +229,7 @@ void loop() {
     stopMotor();
     delay(500);  // Delay 500ms so that a button push won't be counted multiple times.
   }
+
   if (status) {                                  // run mBot only if status is 1
     int sensorState = lineFinder.readSensors();  // read the line sensor's state
     // Serial.println(sensorState);
@@ -226,6 +238,12 @@ void loop() {
       delay(200);
       colourSensor.detectColour();
       int col = colourSensor.identifyColours();
+      if (col == CS_WHITE) {
+        led.setColor(255, 255, 255);
+        led.show();
+        celebrate();
+        status = false;
+      }
       colour_move(col);
     } else if (sensorState == L_B_R_W) {
       rightWheelForwardOnly();
@@ -244,17 +262,17 @@ void loop() {
           moveForward();
         }
       } else {
-        #ifdef PID
+#ifdef PID
         float error = setpoint - ultraDistance;
         float derivative = error - previous_error;
         float output = Kp * error + Kd * derivative;
 
-        // Adjust motor speeds based on PID output
-        // leftMotor.run(output);
-        // rightMotor.run(output);
-        #else
+// Adjust motor speeds based on PID output
+// leftMotor.run(output);
+// rightMotor.run(output);
+#else
         moveForward();
-        #endif
+#endif
       }
     }
   }

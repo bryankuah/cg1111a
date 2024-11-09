@@ -5,15 +5,17 @@
 #define SLOW_SPEED 70
 #define MID_SPEED 150
 #define FAST_SPEED 200
-#define TURN_90_DELAY 520
-#define TURN_180_DELAY 720
+#define TURN_90_DELAY 550
+#define TURN_180_DELAY 1000
 #define ONE_WALL_DELAY 850
+#define SPEED_REVERSE_DELAY 400
 
 #define L_B_R_B (0x00)  // left black, right black
 #define L_B_R_W (0x01)  // left black, right white
 #define L_W_R_B (0x02)  // left white, right black
 #define L_W_R_W (0x03)  // left white, right white
 
+#define IR_READ_COUNT 10
 // Multiplexer
 #define MUX_INA A0
 #define MUX_INB A1
