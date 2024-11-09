@@ -68,7 +68,7 @@ void celebrate() {
   buzzer.tone(NOTE_A4, SHORT_DELAY);  // A4
   delay(SHORT_DELAY);                 // Wait for note duration
 
-  delay(LONG_DELAY);  // Long pause at the end
+    delay(PAUSE);  // Pause before the next section
 
   // Repeat the song to create a loop
   delay(1000);  // Wait before repeating the piece
@@ -84,7 +84,7 @@ int readIR() {
   setMuxOut(MUX_IR);
   delay(10);
   shineValue = analogRead(IR_READ_PIN);
-  return shineValue - ambientValue;
+  return -(shineValue - ambientValue);
 }
 
 // Function to move forward
@@ -176,7 +176,7 @@ void setupIRSensor() {
 
 // Function to read the ultrasonic distance
 float readUltraDistance() {
-  return ultraSensor.distanceCm() - 4;
+  return ultraSensor.distanceCm(20) - 4;
 }
 
 // Function to handle movement based on detected colour
@@ -215,7 +215,10 @@ void setup() {
   setupIRSensor();
   led.setColor(255, 0, 0);
   led.show();
-  buzzer.tone(130, 500);
+  // buzzer.tone(130, 500);
+  // while(1){
+  //   Serial.println(readIR());
+  // }
   // colourSensor.calibrateColourSensor();
 }
 

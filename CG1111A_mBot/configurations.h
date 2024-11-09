@@ -20,7 +20,7 @@
 // IR sensor configurations
 #define IR_READ_COUNT 10
 #define IR_READ_PIN A3
-#define IR_TOO_NEAR 78  // too near when greater than this value
+#define IR_TOO_NEAR 900  // too near when greater than this value
 
 // Multiplexer configurations
 #define MUX_INA A0
