@@ -70,7 +70,7 @@ void ColourSensor::calibrateColourSensor() {
   detectColour();
   for (int i = 0; i < NUM_COLOURS; i++) {
     Serial.println("Put the sensor on " + _colours[i] + " colour");
-    delay(3000);
+    delay(COLOUR_CALIBRATION_DELAY);
     detectColour();
     Serial.print("RGB values: ");
     for (int j = 0; j < NUM_COMPONENTS; j++) {

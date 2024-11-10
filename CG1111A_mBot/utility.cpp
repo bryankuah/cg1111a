@@ -6,9 +6,9 @@ void setupMultiplexer()
     pinMode(MUX_INA, OUTPUT);
     pinMode(MUX_INB, OUTPUT);
     
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < MUX_OUTPUT_COUNT; i++) {
         setMuxOut(i);
-        delay(500);
+        delay(MUX_SETUP_DELAY);
     }
 }
 

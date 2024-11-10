@@ -21,7 +21,6 @@ private:
     int _led_pins[NUM_COMPONENTS];
     void _readColour(double *colourValue);
     double _calculateDistance(int colour_idx);
-    int _readLDR();
     double _rgb_vals[NUM_COMPONENTS];
 
     String _colours[NUM_COLOURS] = {"blue", "green", "pink", "red", "white", "orange"};
