@@ -18,9 +18,8 @@
 #define LINE_WHITE_WHITE (0x03)
 
 // IR sensor configurations
-#define IR_READ_COUNT 10
 #define IR_READ_PIN A3
-#define IR_TOO_NEAR 900  // too near when greater than this value
+#define IR_TURN_DELTA 1.2  // too near when greater than this value
 
 // Multiplexer configurations
 #define MUX_INA A0
@@ -36,8 +35,9 @@
 
 // Colour sensor configurations
 #define CS_LDR_PIN A2
-#define CS_SAMPLES 50
+#define CS_SAMPLES 10
 #define CS_DELAY_BEFORE_READING 300
+#define CS_DELAY_BEFORE_AMBIENT 400
 #define CS_THRESHOLD 350
 
 // Colour definitions

@@ -14,24 +14,26 @@ public:
     void detectColour();
     int getRGBValues(long rgb_values[NUM_COMPONENTS]);
     int identifyColours();
+    void getWhite();
     void calibrateColourSensor();
 
 private:
     int _ina; int _inb; int _ldrPin;
+    double _ambient_light = 0;
     int _led_pins[NUM_COMPONENTS];
     void _readColour(double *colourValue);
     double _calculateDistance(int colour_idx);
     double _rgb_vals[NUM_COMPONENTS];
-
-    String _colours[NUM_COLOURS] = {"blue", "green", "pink", "red", "white", "orange"};
-        double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
-            {0.035536, 0.210370, 0.754094}, // Blue
-            {0.053768, 0.299400, 0.646832}, // Green
-            {0.151992, 0.235849, 0.612159}, // Pink
-            {0.277264, 0.179708, 0.543027}, // Red
-            {0.121994, 0.251456, 0.626550}, // White
-            {0.263023, 0.224105, 0.512426}  // Orange
-        };
+    double _multiplier[3] = {2.34, 3.22, 3.94};
+        String _colours[NUM_COLOURS] = {"blue", "green", "pink", "red", "white", "orange"};
+    double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
+        {0.156016, 0.382586, 0.461398}, // Blue
+        {0.224825, 0.468242, 0.306933}, // Green
+        {0.387683, 0.303868, 0.308450}, // Pink
+        {0.578722, 0.214699, 0.206579}, // Red
+        {0.324313, 0.341865, 0.333821}, // White
+        {0.545802, 0.261144, 0.193053}  // Orange
+    };
 };
 
         //3.5cm

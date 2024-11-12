@@ -12,6 +12,7 @@ MeRGBLed led(0, 30);
 MeBuzzer buzzer;
 
 int status = false;  // global status; 0 = do nothing, 1 = mBot runs
+int irTurnDist;
 float ultraDistance;
 
 #ifdef PID
@@ -78,13 +79,18 @@ void celebrate() {
 int readIR() {
   int ambientValue;
   int shineValue;
-  setMuxOut(MUX_LED_B);  // Turn off IR Emitter
-  delay(10);
+  setMuxOut(MUX_LED_R);  // Turn off IR Emitter
+  delay(1);
   ambientValue = analogRead(IR_READ_PIN);
   setMuxOut(MUX_IR);
-  delay(10);
+  delay(1);
   shineValue = analogRead(IR_READ_PIN);
+  setMuxOut(MUX_LED_R);  // Turn off IR Emitter
   return -(shineValue - ambientValue);
+}
+
+void caliberateIR(){
+  irTurnDist = readIR() * IR_TURN_DELTA;
 }
 
 // Function to move forward
@@ -210,15 +216,15 @@ void colour_move(int col) {
 void setup() {
   Serial.begin(9600);  // Setup serial monitor for debugging purpose
   pinMode(PUSH_BUTTON_PIN, INPUT);  // Setup push button pin as input
-  led.setpin(LED_PIN);
   setupMultiplexer();
   setupIRSensor();
+  caliberateIR();
+  led.setpin(LED_PIN);
   led.setColor(255, 0, 0);
   led.show();
   // buzzer.tone(130, 500);
-  // while(1){
-  //   Serial.println(readIR());
-  // }
+  // colourSensor.detectColour();
+  // colourSensor.getWhite();
   // colourSensor.calibrateColourSensor();
 }
 

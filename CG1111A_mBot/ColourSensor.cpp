@@ -11,25 +11,45 @@ ColourSensor::ColourSensor(int ldrPin, int ledPins[NUM_COMPONENTS]) {
 
 
 void ColourSensor::_readColour(double *colourValue) {
-  *colourValue = 0;
-  for (int i = CS_SAMPLES; i > 0; i--) {
-    *colourValue += analogRead(_ldrPin);
+  double startValue, endValue;
+  do {
+    *colourValue = 0;
+    startValue = analogRead(_ldrPin);
+    for (int i = CS_SAMPLES; i > 0; i--) {
+      *colourValue += analogRead(_ldrPin);
+    }
+    endValue = analogRead(_ldrPin);
+  } while (abs(startValue - endValue) > 5);
+}
+
+void ColourSensor::getWhite() {
+  setMuxOut(MUX_IR);  // turn off all LEDs
+  delay(CS_DELAY_BEFORE_AMBIENT);
+  for (int i = 0; i < NUM_COMPONENTS; i++) {
+    _multiplier[i] = 1;
+  }
+  detectColour();
+
+  // compute _multiplier[3] to be multiplied to r, g and b to get .3333, .3333,.3333
+  for (int i = 0; i < NUM_COMPONENTS; i++) {
+    Serial.println(1 / _rgb_vals[i]);
   }
 }
 
+
 void ColourSensor::detectColour() {
-  double ambient_light = 0;
-  setMuxOut(MUX_IR);  // turn off all LEDs
-  delay(CS_DELAY_BEFORE_READING);
-  _readColour(&ambient_light);
+  double reading = 0;
+  // setMuxOut(MUX_IR);
   for (int i = 0; i < NUM_COMPONENTS; i++) {
-    double reading = 0;
+    setMuxOut(MUX_IR);
+    delay(CS_DELAY_BEFORE_AMBIENT);
     setMuxOut(_led_pins[i]);
     delay(CS_DELAY_BEFORE_READING);
     _readColour(&reading);
-    reading -= ambient_light;
-    _rgb_vals[i] = reading;
+    // reading -= _ambient_light;
+    _rgb_vals[i] = reading * _multiplier[i];
   }
+
 
   // Normalize the values
   double sum = 0;
@@ -54,8 +74,8 @@ int ColourSensor::identifyColours() {
       best_match = colour_idx;
     }
   }
-
-  return (min_distance <= CS_THRESHOLD) ? best_match : -1;
+  Serial.println(distance);
+  return best_match;
 }
 
 double ColourSensor::_calculateDistance(int colour_idx) {
