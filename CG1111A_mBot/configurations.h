@@ -11,6 +11,8 @@
 #define MOVE_ONE_WALL_DELAY 850
 #define MOVE_REVERSE_DELAY 400
 
+#define RIGHT_DEVIATION 20
+
 // Line sensor states
 #define LINE_BLACK_BLACK (0x00)
 #define LINE_BLACK_WHITE (0x01)
@@ -20,6 +22,7 @@
 // IR sensor configurations
 #define IR_READ_PIN A3
 #define IR_TURN_DELTA 1.2  // too near when greater than this value
+#define IR_TOO_NEAR 240
 
 // Multiplexer configurations
 #define MUX_INA A0

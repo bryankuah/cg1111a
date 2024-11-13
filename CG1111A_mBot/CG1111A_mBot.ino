@@ -86,17 +86,14 @@ int readIR() {
   delay(1);
   shineValue = analogRead(IR_READ_PIN);
   setMuxOut(MUX_LED_R);  // Turn off IR Emitter
+  // Serial.println(-(shineValue - ambientValue));
   return -(shineValue - ambientValue);
-}
-
-void caliberateIR(){
-  irTurnDist = readIR() * IR_TURN_DELTA;
 }
 
 // Function to move forward
 void moveForward() {
   leftMotor.run(-MOVE_FAST);  // Left wheel goes forward (anti-clockwise)
-  rightMotor.run(MOVE_FAST);  // Right wheel goes forward (clockwise)
+  rightMotor.run(MOVE_FAST - RIGHT_DEVIATION);  // Right wheel goes forward (clockwise)
 }
 
 // Function to turn right 90 degrees
@@ -182,7 +179,7 @@ void setupIRSensor() {
 
 // Function to read the ultrasonic distance
 float readUltraDistance() {
-  return ultraSensor.distanceCm(20) - 4;
+  return ultraSensor.distanceCm(20) - ULTRA_SENSOR_OFFSET;
 }
 
 // Function to handle movement based on detected colour
@@ -218,7 +215,6 @@ void setup() {
   pinMode(PUSH_BUTTON_PIN, INPUT);  // Setup push button pin as input
   setupMultiplexer();
   setupIRSensor();
-  caliberateIR();
   led.setpin(LED_PIN);
   led.setColor(255, 0, 0);
   led.show();
@@ -253,7 +249,7 @@ void loop() {
       if (col == CS_WHITE) {
         led.setColor(255, 255, 255);
         led.show();
-        celebrate();
+        // celebrate();
         status = false;
       }
       colour_move(col);
@@ -262,7 +258,8 @@ void loop() {
     } else if (sensorState == LINE_WHITE_BLACK) {
       leftWheelForwardOnly();
     } else if (sensorState == LINE_WHITE_WHITE) {
-      ultraDistance = readUltraDistance() - ULTRA_SENSOR_OFFSET;
+      ultraDistance = readUltraDistance();
+      // Serial.println(ultraDistance);
       if (ultraDistance < ULTRA_DISTANCE_THRESHOLD_LOW) {
         nudgeRight();
       } else if (ultraDistance > ULTRA_DISTANCE_THRESHOLD_HIGH) {
@@ -273,17 +270,7 @@ void loop() {
           moveForward();
         }
       } else {
-#ifdef PID
-        float error = setpoint - ultraDistance;
-        float derivative = error - previous_error;
-        float output = Kp * error + Kd * derivative;
-
-        // Adjust motor speeds based on PID output
-        // leftMotor.run(output);
-        // rightMotor.run(output);
-#else
         moveForward();
-#endif
       }
     }
   }
