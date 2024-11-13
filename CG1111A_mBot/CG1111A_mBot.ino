@@ -28,51 +28,22 @@ ColourSensor colourSensor(CS_LDR_PIN, led_pins);
 
 // Function to play celebratory tune
 void celebrate() {
-  // Simplified bass line and melody from Moonlight Sonata
-  // Bass Line (arpeggio-style)
-  buzzer.tone(BUZZER_NOTE_C3, BUZZER_LONG_DELAY);  // C3
-  delay(BUZZER_LONG_DELAY);                 // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_G3, BUZZER_LONG_DELAY);  // G3
-  delay(BUZZER_LONG_DELAY);                 // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_C3, BUZZER_LONG_DELAY);  // C3
-  delay(BUZZER_LONG_DELAY);                 // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_G3, BUZZER_LONG_DELAY);  // G3
-  delay(BUZZER_LONG_DELAY);                 // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_C3, BUZZER_LONG_DELAY);  // C3
-  delay(BUZZER_LONG_DELAY);                 // Wait for note duration
+  // Simplified melody of the first few notes of the Moonlight Sonata (1st Movement)
+  int melody[] = {
+    E4, E4, E4, G4, G4, G4, E4, G4, E4, C5, B4, C5, E4, E4, D5, C5
+  };
 
-  delay(BUZZER_PAUSE);  // Short pause before melody begins
+  // Note durations (in milliseconds)
+  int duration[] = {
+    500, 500, 500, 500, 500, 500, 500, 500, 500, 1000, 500, 500, 500, 500, 1000, 1000
+  };
 
-  // Melody part 1
-  buzzer.tone(BUZZER_NOTE_EB4, BUZZER_SHORT_DELAY);  // Eb4 (start of melody)
-  delay(BUZZER_SHORT_DELAY);                  // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_G4, BUZZER_SHORT_DELAY);   // G4
-  delay(BUZZER_SHORT_DELAY);                  // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_C4, BUZZER_SHORT_DELAY);   // C4
-  delay(BUZZER_SHORT_DELAY);                  // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_EB4, BUZZER_SHORT_DELAY);  // Eb4
-  delay(BUZZER_SHORT_DELAY);                  // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_G4, BUZZER_SHORT_DELAY);   // G4
-  delay(BUZZER_SHORT_DELAY);                  // Wait for note duration
-
-  delay(BUZZER_PAUSE);  // Pause before the next section
-
-  // Melody part 2
-  buzzer.tone(BUZZER_NOTE_F4, BUZZER_SHORT_DELAY);  // F4
-  delay(BUZZER_SHORT_DELAY);                 // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_A4, BUZZER_SHORT_DELAY);  // A4
-  delay(BUZZER_SHORT_DELAY);                 // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_C4, BUZZER_SHORT_DELAY);  // C4
-  delay(BUZZER_SHORT_DELAY);                 // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_F4, BUZZER_SHORT_DELAY);  // F4
-  delay(BUZZER_SHORT_DELAY);                 // Wait for note duration
-  buzzer.tone(BUZZER_NOTE_A4, BUZZER_SHORT_DELAY);  // A4
-  delay(BUZZER_SHORT_DELAY);                 // Wait for note duration
-
-    delay(BUZZER_PAUSE);  // Pause before the next section
-
-  // Repeat the song to create a loop
-  delay(1000);  // Wait before repeating the piece
+  // Play each note in the melody
+  for (int i = 0; i < 16; i++) {
+    buzzer.tone(melody[i], duration[i]);  // Play the note with the specified frequency and duration
+    delay(duration[i]);  // Wait for the note to finish
+  }
+  buzzer.noTone();  // Stop the buzzer after playing the melody
 }
 
 // Function to read the IR sensor
@@ -266,7 +237,7 @@ void loop() {
       if (col == CS_WHITE) {
         led.setColor(255, 255, 255);
         led.show();
-        // celebrate();
+        celebrate();
         status = false;
       }
       colour_move(col);

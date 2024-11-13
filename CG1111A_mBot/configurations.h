@@ -56,13 +56,18 @@
 #define SPEED_OF_SOUND 0.0343  // centimetre/microsecond
 
 // Note frequencies for "Moonlight Sonata"
-#define BUZZER_NOTE_C3 130
-#define BUZZER_NOTE_G3 196
-#define BUZZER_NOTE_EB4 311
-#define BUZZER_NOTE_G4 392
-#define BUZZER_NOTE_C4 261
-#define BUZZER_NOTE_F4 349
-#define BUZZER_NOTE_A4 440
+#define C4 262
+#define D4 294
+#define E4 330
+#define F4 349
+#define G4 392
+#define A4 440
+#define B4 494
+#define C5 523
+#define D5 587
+#define E5 659
+#define F5 698
+#define G5 784
 
 // Delay times for rhythm
 #define BUZZER_LONG_DELAY 500
