@@ -4,14 +4,14 @@
 #define MOVE_SLOW 70
 #define MOVE_MID 150
 #define MOVE_FAST 255
+#define LEFT_FAST 255
+#define RIGHT_FAST 215
 
 // Movement delay configurations
-#define MOVE_TURN_90_DELAY 550
+#define MOVE_TURN_90_DELAY 336
 #define MOVE_TURN_180_DELAY 1000
-#define MOVE_ONE_WALL_DELAY 850
+#define MOVE_ONE_WALL_DELAY 750
 #define MOVE_REVERSE_DELAY 400
-
-#define RIGHT_DEVIATION 40
 
 // Line sensor states
 #define LINE_BLACK_BLACK (0x00)

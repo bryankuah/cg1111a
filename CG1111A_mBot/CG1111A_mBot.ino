@@ -92,32 +92,32 @@ int readIR() {
 
 // Function to move forward
 void moveForward() {
-  leftMotor.run(-MOVE_FAST);  // Left wheel goes forward (anti-clockwise)
-  rightMotor.run(MOVE_FAST - RIGHT_DEVIATION);  // Right wheel goes forward (clockwise)
+  leftMotor.run(-LEFT_FAST);  // Left wheel goes forward (anti-clockwise)
+  rightMotor.run(RIGHT_FAST);  // Right wheel goes forward (clockwise)
 }
 
 // Function to turn right 90 degrees
 void turnRight() {
-  leftMotor.run(-MOVE_MID);   // Left wheel goes forward (anti-clockwise)
-  rightMotor.run(-MOVE_MID);  // Right wheel goes backward (anti-clockwise)
+  leftMotor.run(-LEFT_FAST);   // Left wheel goes forward (anti-clockwise)
+  rightMotor.run(-RIGHT_FAST);  // Right wheel goes backward (anti-clockwise)
   delay(MOVE_TURN_90_DELAY);
   stopMotor();
 }
 
 // Function to turn left 90 degrees
 void turnLeft() {
-  leftMotor.run(MOVE_MID);   // Left wheel goes backward (clockwise)
-  rightMotor.run(MOVE_MID);  // Right wheel goes forward (clockwise)
+  leftMotor.run(LEFT_FAST);   // Left wheel goes backward (clockwise)
+  rightMotor.run(RIGHT_FAST);  // Right wheel goes forward (clockwise)
   delay(MOVE_TURN_90_DELAY);
   stopMotor();
 }
 
 // Function to perform a U-turn
 void uTurn() {
-  leftMotor.run(MOVE_MID);   // Left wheel goes backward (clockwise)
-  rightMotor.run(MOVE_MID);  // Right wheel goes backward (clockwise)
-  delay(MOVE_TURN_180_DELAY);
-  stopMotor();
+  // leftMotor.run(MOVE_FAST);   // Left wheel goes backward (clockwise)
+  // rightMotor.run(MOVE_FAST);  // Right wheel goes backward (clockwise)
+  turnRight();
+  turnRight();
 }
 
 // Function to perform a double left turn
@@ -145,24 +145,24 @@ void doubleRightTurn() {
 // Function to nudge slightly to the left
 void nudgeLeft() {
   leftMotor.run(-MOVE_SLOW);  // Left wheel stops
-  rightMotor.run(MOVE_FAST);  // Right wheel goes forward
+  rightMotor.run(RIGHT_FAST);  // Right wheel goes forward
 }
 
 // Function to nudge slightly to the right
 void nudgeRight() {
-  leftMotor.run(-MOVE_FAST);  // Left wheel goes forward
+  leftMotor.run(-LEFT_FAST);  // Left wheel goes forward
   rightMotor.run(MOVE_SLOW);  // Right wheel slows down
 }
 
 // Function to move only the right wheel forward
 void rightWheelForwardOnly() {
   leftMotor.run(0);            // Left wheel slows down
-  rightMotor.run(MOVE_FAST);  // Right wheel goes forward
+  rightMotor.run(RIGHT_FAST);  // Right wheel goes forward
 }
 
 // Function to move only the left wheel forward
 void leftWheelForwardOnly() {
-  leftMotor.run(-MOVE_FAST);  // Left wheel goes forward
+  leftMotor.run(-LEFT_FAST);  // Left wheel goes forward
   rightMotor.run(0);           // Right wheel stops
 }
 
@@ -209,6 +209,18 @@ void colour_move(int col) {
   led.show();
 }
 
+void testMovements() {
+  while (true) {
+    // turnRight();
+    // doubleRightTurn();
+    // uTurn();
+    turnLeft();
+    // doubleLeftTurn();
+    stopMotor();
+    delay(500);
+  }
+}
+
 // Arduino setup function
 void setup() {
   Serial.begin(9600);  // Setup serial monitor for debugging purpose
@@ -222,6 +234,7 @@ void setup() {
   // colourSensor.detectColour();
   // colourSensor.getWhite();
   // colourSensor.calibrateColourSensor();
+  // testMovements();
 }
 
 // Arduino loop function
