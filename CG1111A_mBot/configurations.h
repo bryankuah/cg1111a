@@ -5,10 +5,10 @@
 #define MOVE_MID 150
 #define MOVE_FAST 255
 #define LEFT_FAST 255
-#define RIGHT_FAST 215
+#define RIGHT_FAST 220
 
 // Movement delay configurations
-#define MOVE_TURN_90_DELAY 336
+#define MOVE_TURN_90_DELAY 320
 #define MOVE_TURN_180_DELAY 1000
 #define MOVE_ONE_WALL_DELAY 750
 #define MOVE_REVERSE_DELAY 400
@@ -22,7 +22,7 @@
 // IR sensor configurations
 #define IR_READ_PIN A3
 #define IR_TURN_DELTA 1.2  // too near when greater than this value
-#define IR_TOO_NEAR 240
+#define IR_TOO_NEAR 200
 
 // Multiplexer configurations
 #define MUX_INA A0
@@ -39,8 +39,8 @@
 // Colour sensor configurations
 #define CS_LDR_PIN A2
 #define CS_SAMPLES 10
-#define CS_DELAY_BEFORE_READING 300
-#define CS_DELAY_BEFORE_AMBIENT 400
+#define CS_DELAY_BEFORE_READING 250
+#define CS_DELAY_BEFORE_AMBIENT 50
 #define CS_THRESHOLD 350
 
 // Colour definitions
@@ -71,7 +71,7 @@
 
 // Sensor delays
 #define COLOUR_CALIBRATION_DELAY 3000
-#define IR_SENSOR_DELAY 10
+#define IR_SENSOR_DELAY 1
 #define LINE_SENSOR_DELAY 200
 
 // Pin configurations

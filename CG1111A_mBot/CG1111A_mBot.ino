@@ -116,8 +116,8 @@ void turnLeft() {
 void uTurn() {
   // leftMotor.run(MOVE_FAST);   // Left wheel goes backward (clockwise)
   // rightMotor.run(MOVE_FAST);  // Right wheel goes backward (clockwise)
-  turnRight();
-  turnRight();
+  turnLeft();
+  turnLeft();
 }
 
 // Function to perform a double left turn
@@ -231,7 +231,11 @@ void setup() {
   led.setColor(255, 0, 0);
   led.show();
   // buzzer.tone(130, 500);
-  // colourSensor.detectColour();
+  // while(1){
+  //   colourSensor.detectColour();
+  //   int col = colourSensor.identifyColours();
+  //   colour_move(col);
+  // }
   // colourSensor.getWhite();
   // colourSensor.calibrateColourSensor();
   // testMovements();

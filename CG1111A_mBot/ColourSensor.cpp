@@ -57,7 +57,9 @@ void ColourSensor::detectColour() {
   }
   for (int i = 0; i < NUM_COMPONENTS; i++) {
     _rgb_vals[i] /= sum;
+    Serial.println(_rgb_vals[i]);
   }
+  Serial.println();
 }
 
 
@@ -73,7 +75,6 @@ int ColourSensor::identifyColours() {
       best_match = colour_idx;
     }
   }
-  Serial.println(distance);
   return best_match;
 }
 
