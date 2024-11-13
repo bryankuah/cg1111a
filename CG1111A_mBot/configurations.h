@@ -11,7 +11,7 @@
 #define MOVE_TURN_90_DELAY 320
 #define MOVE_TURN_180_DELAY 1000
 #define MOVE_ONE_WALL_DELAY 750
-#define MOVE_REVERSE_DELAY 400
+#define MOVE_REVERSE_DELAY 200
 
 // Line sensor states
 #define LINE_BLACK_BLACK (0x00)

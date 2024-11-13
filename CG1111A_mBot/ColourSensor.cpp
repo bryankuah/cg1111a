@@ -57,9 +57,7 @@ void ColourSensor::detectColour() {
   }
   for (int i = 0; i < NUM_COMPONENTS; i++) {
     _rgb_vals[i] /= sum;
-    Serial.println(_rgb_vals[i]);
   }
-  Serial.println();
 }
 
 

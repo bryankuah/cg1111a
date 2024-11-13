@@ -26,14 +26,14 @@ private:
     double _rgb_vals[NUM_COMPONENTS];
     double _multiplier[3] = {1, 1, 1};
     String _colours[NUM_COLOURS] = {"blue", "green", "pink", "red", "white", "orange"};
-        double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
-            {0.144832, 0.357040, 0.498128}, // Blue
-            {0.220149, 0.496269, 0.283582}, // Green
-            {0.422764, 0.286585, 0.290650}, // Pink
-            {0.732206, 0.140944, 0.126850}, // Red
-            {0.331691, 0.341544, 0.326765}, // White
-            {0.646144, 0.226760, 0.127095}  // Orange
-        };
+            double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
+                {0.140260, 0.368831, 0.490909}, // Blue
+                {0.218430, 0.491468, 0.290102}, // Green
+                {0.408110, 0.307161, 0.284728}, // Pink
+                {0.688047, 0.174927, 0.137026}, // Red
+                {0.342105, 0.346260, 0.311634}, // White
+                {0.614326, 0.252846, 0.132827}  // Orange
+            };
 };
 
         //3.5cm
