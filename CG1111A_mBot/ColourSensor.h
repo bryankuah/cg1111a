@@ -24,16 +24,16 @@ private:
     void _readColour(double *colourValue);
     double _calculateDistance(int colour_idx);
     double _rgb_vals[NUM_COMPONENTS];
-    double _multiplier[3] = {2.34, 3.22, 3.94};
+    double _multiplier[3] = {2.41, 3.24, 3.61};
         String _colours[NUM_COLOURS] = {"blue", "green", "pink", "red", "white", "orange"};
     double _recorded_rgb_values[NUM_COLOURS][NUM_COMPONENTS] = {
-        {0.156016, 0.382586, 0.461398}, // Blue
-        {0.224825, 0.468242, 0.306933}, // Green
-        {0.387683, 0.303868, 0.308450}, // Pink
-        {0.578722, 0.214699, 0.206579}, // Red
-        {0.324313, 0.341865, 0.333821}, // White
-        {0.545802, 0.261144, 0.193053}  // Orange
-    };
+            {0.203490, 0.371844, 0.424666}, // Blue
+            {0.266424, 0.414654, 0.318922}, // Green
+            {0.379544, 0.301241, 0.319215}, // Pink
+            {0.545672, 0.229151, 0.225177}, // Red
+            {0.326557, 0.336127, 0.337316}, // White
+            {0.508530, 0.276555, 0.214914}  // Orange
+        };
 };
 
         //3.5cm
