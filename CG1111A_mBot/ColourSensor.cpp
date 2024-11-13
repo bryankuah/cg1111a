@@ -50,7 +50,6 @@ void ColourSensor::detectColour() {
     _rgb_vals[i] = reading * _multiplier[i];
   }
 
-
   // Normalize the values
   double sum = 0;
   for (int i = 0; i < NUM_COMPONENTS; i++) {
