@@ -229,7 +229,8 @@ void loop() {
   if (status) {                                  // run mBot only if status is 1
     int sensorState = lineFinder.readSensors();  // read the line sensor's state
     // Serial.println(sensorState);
-    if (sensorState == LINE_BLACK_BLACK) {  // situation 4
+    if (sensorState == LINE_BLACK_BLACK) {  // both line sensors detect black
+      // begin colour challenge
       stopMotor();
       delay(LINE_SENSOR_DELAY);
       colourSensor.detectColour();
@@ -241,23 +242,25 @@ void loop() {
         status = false;
       }
       colour_move(col);
-    } else if (sensorState == LINE_BLACK_WHITE) {
+    } else if (sensorState == LINE_BLACK_WHITE) { // only left sensor detect black
+      // reposition until both sensors detect black
       rightWheelForwardOnly();
     } else if (sensorState == LINE_WHITE_BLACK) {
+      // reposition until both sensors detect black
       leftWheelForwardOnly();
-    } else if (sensorState == LINE_WHITE_WHITE) {
-      ultraDistance = readUltraDistance();
+    } else if (sensorState == LINE_WHITE_WHITE) { // both line sensors detect white
+      ultraDistance = readUltraDistance(); // distance of mBot from left wall
       // Serial.println(ultraDistance);
-      if (ultraDistance < ULTRA_DISTANCE_THRESHOLD_LOW) {
+      if (ultraDistance < ULTRA_DISTANCE_THRESHOLD_LOW) { // too close to left wall
         nudgeRight();
-      } else if (ultraDistance > ULTRA_DISTANCE_THRESHOLD_HIGH) {
+      } else if (ultraDistance > ULTRA_DISTANCE_THRESHOLD_HIGH) { // too far from right wall
         int irReading = readIR();
-        if (irReading > IR_TOO_NEAR) {
+        if (irReading > IR_TOO_NEAR) { // mBot too close to right wall
           nudgeLeft();
-        } else {
+        } else { // there is either missing left/right wall in the grid
           moveForward();
         }
-      } else {
+      } else { // mBot is within the predetermined ideal distance from the left wall
         moveForward();
       }
     }
