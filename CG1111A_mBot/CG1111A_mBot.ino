@@ -12,19 +12,7 @@ MeRGBLed led(0, 30);
 MeBuzzer buzzer;
 
 int status = false;  // global status; 0 = do nothing, 1 = mBot runs
-int irTurnDist;
 float ultraDistance;
-
-// FOR FUN REMOVE LATER
-int clrState = 0;
-
-#ifdef PID
-// PID constants
-float Kp = 0.3;
-float Kd = 0.02;
-float previous_error = 0;
-float setpoint = 7.0;  // Desired distance
-#endif
 
 int led_pins[NUM_COMPONENTS] = { MUX_LED_R, MUX_LED_G, MUX_LED_B };
 ColourSensor colourSensor(CS_LDR_PIN, led_pins);
@@ -88,8 +76,6 @@ void turnLeft() {
 
 // Function to perform a U-turn
 void uTurn() {
-  // leftMotor.run(MOVE_FAST);   // Left wheel goes backward (clockwise)
-  // rightMotor.run(MOVE_FAST);  // Right wheel goes backward (clockwise)
   turnLeft();
   turnLeft();
 }
