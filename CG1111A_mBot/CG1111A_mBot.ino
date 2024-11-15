@@ -15,6 +15,9 @@ int status = false;  // global status; 0 = do nothing, 1 = mBot runs
 int irTurnDist;
 float ultraDistance;
 
+// FOR FUN REMOVE LATER
+int clrState = 0;
+
 #ifdef PID
 // PID constants
 float Kp = 0.3;
@@ -115,14 +118,14 @@ void doubleRightTurn() {
 
 // Function to nudge slightly to the left
 void nudgeLeft() {
-  leftMotor.run(-MOVE_MID);   // Left wheel stops
+  leftMotor.run(-MOVE_MID);    // Left wheel stops
   rightMotor.run(RIGHT_FAST);  // Right wheel goes forward
 }
 
 // Function to nudge slightly to the right
 void nudgeRight() {
   leftMotor.run(-LEFT_FAST);  // Left wheel goes forward
-  rightMotor.run(MOVE_MID);  // Right wheel slows down
+  rightMotor.run(MOVE_MID);   // Right wheel slows down
 }
 
 // Function to move only the right wheel forward
@@ -192,6 +195,22 @@ void testMovements() {
   }
 }
 
+void ambulanceLight() {
+  if (clrState == 0) {
+    led.setColor(255, 255, 255);
+    led.show();
+    clrState = 1;
+  } else if (clrState == 1) {
+    led.setColor(255, 0, 0);
+    led.show();
+    clrState = 2;
+  } else if (clrState == 2) {
+    led.setColor(0, 0, 255);
+    led.show();
+    clrState = 0;
+  }
+}
+
 // Arduino setup function
 void setup() {
   Serial.begin(9600);               // Setup serial monitor for debugging purpose
@@ -253,7 +272,9 @@ void loop() {
       // reposition until both sensors detect black
       leftWheelForwardOnly();
     } else if (sensorState == LINE_WHITE_WHITE) {  // both line sensors detect white
-      ultraDistance = readUltraDistance();         // distance of mBot from left wall
+      ambulanceLight();
+
+      ultraDistance = readUltraDistance();  // distance of mBot from left wall
       // Serial.println(ultraDistance);
       if (ultraDistance < ULTRA_DISTANCE_THRESHOLD_LOW) {  // too close to left wall
         nudgeRight();
