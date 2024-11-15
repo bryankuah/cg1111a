@@ -196,24 +196,26 @@ void testMovements() {
 }
 
 void ambulanceLight() {
-  if (clrState == 0) {
+  if (clrState < 20) {
     led.setColor(255, 255, 255);
     led.show();
-    clrState = 1;
-  } else if (clrState == 1) {
+    clrState += 1;
+  } else if (clrState < 40) {
     led.setColor(255, 0, 0);
     led.show();
-    clrState = 2;
-  } else if (clrState == 2) {
+    clrState += 1;
+  } else if (clrState < 60) {
     led.setColor(0, 0, 255);
     led.show();
+    clrState += 1;
+  } else {
     clrState = 0;
   }
 }
 
 // Arduino setup function
 void setup() {
-  Serial.begin(9600);               // Setup serial monitor for debugging purpose
+  //Serial.begin(9600);               // Setup serial monitor for debugging purpose
   pinMode(PUSH_BUTTON_PIN, INPUT);  // Setup push button pin as input
   setupMultiplexer();
   setupIRSensor();
@@ -248,7 +250,6 @@ void loop() {
     stopMotor();
     delay(BUTTON_LOOP_DELAY);  // Delay so that a button push won't be counted multiple times.
   }
-
   if (status) {                                  // run mBot only if status is 1
     int sensorState = lineFinder.readSensors();  // read the line sensor's state
     // Serial.println(sensorState);
@@ -272,8 +273,7 @@ void loop() {
       // reposition until both sensors detect black
       leftWheelForwardOnly();
     } else if (sensorState == LINE_WHITE_WHITE) {  // both line sensors detect white
-      ambulanceLight();
-
+      // ambulanceLight();
       ultraDistance = readUltraDistance();  // distance of mBot from left wall
       // Serial.println(ultraDistance);
       if (ultraDistance < ULTRA_DISTANCE_THRESHOLD_LOW) {  // too close to left wall
