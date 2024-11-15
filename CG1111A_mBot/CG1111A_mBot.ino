@@ -115,14 +115,14 @@ void doubleRightTurn() {
 
 // Function to nudge slightly to the left
 void nudgeLeft() {
-  leftMotor.run(-MOVE_SLOW);   // Left wheel stops
+  leftMotor.run(-MOVE_MID);   // Left wheel stops
   rightMotor.run(RIGHT_FAST);  // Right wheel goes forward
 }
 
 // Function to nudge slightly to the right
 void nudgeRight() {
   leftMotor.run(-LEFT_FAST);  // Left wheel goes forward
-  rightMotor.run(MOVE_SLOW);  // Right wheel slows down
+  rightMotor.run(MOVE_MID);  // Right wheel slows down
 }
 
 // Function to move only the right wheel forward
@@ -201,6 +201,10 @@ void setup() {
   led.setpin(LED_PIN);
   led.setColor(255, 0, 0);
   led.show();
+  // while (1) {
+  //   int irReading = readIR();
+  //   Serial.println(irReading);
+  // }
   // buzzer.tone(130, 500);
   // while(1){
   //   colourSensor.detectColour();
