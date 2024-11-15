@@ -41,7 +41,7 @@ void celebrate() {
   // Play each note in the melody
   for (int i = 0; i < 16; i++) {
     buzzer.tone(melody[i], duration[i]);  // Play the note with the specified frequency and duration
-    delay(duration[i]);  // Wait for the note to finish
+    delay(duration[i]);                   // Wait for the note to finish
   }
   buzzer.noTone();  // Stop the buzzer after playing the melody
 }
@@ -63,13 +63,13 @@ int readIR() {
 
 // Function to move forward
 void moveForward() {
-  leftMotor.run(-LEFT_FAST);  // Left wheel goes forward (anti-clockwise)
+  leftMotor.run(-LEFT_FAST);   // Left wheel goes forward (anti-clockwise)
   rightMotor.run(RIGHT_FAST);  // Right wheel goes forward (clockwise)
 }
 
 // Function to turn right 90 degrees
 void turnRight() {
-  leftMotor.run(-LEFT_FAST);   // Left wheel goes forward (anti-clockwise)
+  leftMotor.run(-LEFT_FAST);    // Left wheel goes forward (anti-clockwise)
   rightMotor.run(-RIGHT_FAST);  // Right wheel goes backward (anti-clockwise)
   delay(MOVE_TURN_90_DELAY);
   stopMotor();
@@ -77,7 +77,7 @@ void turnRight() {
 
 // Function to turn left 90 degrees
 void turnLeft() {
-  leftMotor.run(LEFT_FAST);   // Left wheel goes backward (clockwise)
+  leftMotor.run(LEFT_FAST);    // Left wheel goes backward (clockwise)
   rightMotor.run(RIGHT_FAST);  // Right wheel goes forward (clockwise)
   delay(MOVE_TURN_90_DELAY);
   stopMotor();
@@ -115,7 +115,7 @@ void doubleRightTurn() {
 
 // Function to nudge slightly to the left
 void nudgeLeft() {
-  leftMotor.run(-MOVE_SLOW);  // Left wheel stops
+  leftMotor.run(-MOVE_SLOW);   // Left wheel stops
   rightMotor.run(RIGHT_FAST);  // Right wheel goes forward
 }
 
@@ -134,7 +134,7 @@ void rightWheelForwardOnly() {
 // Function to move only the left wheel forward
 void leftWheelForwardOnly() {
   leftMotor.run(-LEFT_FAST);  // Left wheel goes forward
-  rightMotor.run(0);           // Right wheel stops
+  rightMotor.run(0);          // Right wheel stops
 }
 
 // Function to stop the motors
@@ -194,7 +194,7 @@ void testMovements() {
 
 // Arduino setup function
 void setup() {
-  Serial.begin(9600);  // Setup serial monitor for debugging purpose
+  Serial.begin(9600);               // Setup serial monitor for debugging purpose
   pinMode(PUSH_BUTTON_PIN, INPUT);  // Setup push button pin as input
   setupMultiplexer();
   setupIRSensor();
@@ -215,7 +215,7 @@ void setup() {
 // Arduino loop function
 void loop() {
   if (analogRead(PUSH_BUTTON_PIN) < PUSH_BUTTON_THRESHOLD) {  // If push button is pushed, the value will be very low
-    status = !status;          // Toggle status
+    status = !status;                                         // Toggle status
     if (status) {
       led.setColor(0, 0, 0);
     } else {
@@ -242,25 +242,25 @@ void loop() {
         status = false;
       }
       colour_move(col);
-    } else if (sensorState == LINE_BLACK_WHITE) { // only left sensor detect black
+    } else if (sensorState == LINE_BLACK_WHITE) {  // only left sensor detect black
       // reposition until both sensors detect black
       rightWheelForwardOnly();
     } else if (sensorState == LINE_WHITE_BLACK) {
       // reposition until both sensors detect black
       leftWheelForwardOnly();
-    } else if (sensorState == LINE_WHITE_WHITE) { // both line sensors detect white
-      ultraDistance = readUltraDistance(); // distance of mBot from left wall
+    } else if (sensorState == LINE_WHITE_WHITE) {  // both line sensors detect white
+      ultraDistance = readUltraDistance();         // distance of mBot from left wall
       // Serial.println(ultraDistance);
-      if (ultraDistance < ULTRA_DISTANCE_THRESHOLD_LOW) { // too close to left wall
+      if (ultraDistance < ULTRA_DISTANCE_THRESHOLD_LOW) {  // too close to left wall
         nudgeRight();
-      } else if (ultraDistance > ULTRA_DISTANCE_THRESHOLD_HIGH) { // too far from right wall
+      } else if (ultraDistance > ULTRA_DISTANCE_THRESHOLD_HIGH) {  // too far from right wall
         int irReading = readIR();
-        if (irReading > IR_TOO_NEAR) { // mBot too close to right wall
+        if (irReading > IR_TOO_NEAR) {  // mBot too close to right wall
           nudgeLeft();
-        } else { // there is either missing left/right wall in the grid
+        } else {  // there is either missing left/right wall in the grid
           moveForward();
         }
-      } else { // mBot is within the predetermined ideal distance from the left wall
+      } else {  // mBot is within the predetermined ideal distance from the left wall
         moveForward();
       }
     }

@@ -21,7 +21,6 @@
 
 // IR sensor configurations
 #define IR_READ_PIN A3
-#define IR_TURN_DELTA 1.2  // too near when greater than this value
 #define IR_TOO_NEAR 200
 
 // Multiplexer configurations

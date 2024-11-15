@@ -22,32 +22,18 @@ void ColourSensor::_readColour(double *colourValue) {
   } while (abs(startValue - endValue) > 5);
 }
 
-void ColourSensor::getWhite() {
-  setMuxOut(MUX_IR);  // turn off all LEDs
-  delay(CS_DELAY_BEFORE_AMBIENT);
-  for (int i = 0; i < NUM_COMPONENTS; i++) {
-    _multiplier[i] = 1;
-  }
-  detectColour();
-
-  // compute _multiplier[3] to be multiplied to r, g and b to get .3333, .3333,.3333
-  for (int i = 0; i < NUM_COMPONENTS; i++) {
-    Serial.println(1 / _rgb_vals[i]);
-  }
-}
 
 
 void ColourSensor::detectColour() {
   double reading = 0;
-  // setMuxOut(MUX_IR);
   for (int i = 0; i < NUM_COMPONENTS; i++) {
     setMuxOut(MUX_IR);
     delay(CS_DELAY_BEFORE_AMBIENT);
     setMuxOut(_led_pins[i]);
     delay(CS_DELAY_BEFORE_READING);
     _readColour(&reading);
-    // reading -= _ambient_light;
-    _rgb_vals[i] = reading * _multiplier[i];
+    _rgb_vals[i] = reading;
+    // Serial.println(_rgb_vals[i]);
   }
 
   // Normalize the values
