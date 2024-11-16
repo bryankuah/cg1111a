@@ -250,8 +250,9 @@ void loop() {
         led.show();
         celebrate();
         status = false;
+      } else {
+        colour_move(col);
       }
-      colour_move(col);
     } else if (sensorState == LINE_BLACK_WHITE) {  // only left sensor detect black
       // reposition until both sensors detect black
       rightWheelForwardOnly();

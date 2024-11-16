@@ -12,7 +12,6 @@ class ColourSensor {
 public:
   ColourSensor(int ldrPin, int ledPins[NUM_COMPONENTS]);
   void detectColour();
-  int getRGBValues(long rgb_values[NUM_COMPONENTS]);
   int identifyColours();
   void calibrateColourSensor();
 
