@@ -4,8 +4,8 @@
 #include "MeMCore.h"
 
 // Initialize sensors and motors
-MeUltrasonicSensor ultraSensor(PORT_1);  // assigning ultraSensor to RJ25 port 1
-MeLineFollower lineFinder(PORT_2);       // assigning lineFinder to RJ25 port 2
+MeUltrasonicSensor ultraSensor(ULTRA_PORT);  // assigning ultraSensor port
+MeLineFollower lineFinder(LINE_PORT);        // assigning lineFinder port
 MeDCMotor leftMotor(M1);                 // assigning leftMotor to port M1
 MeDCMotor rightMotor(M2);                // assigning RightMotor to port M2
 MeRGBLed led(0, 30);

@@ -12,19 +12,27 @@
 #define MOVE_ONE_WALL_DELAY 760
 #define MOVE_REVERSE_DELAY 200
 
-// Line sensor states
+// Pin configurations
+#define LINE_PORT PORT_2
+#define IR_READ_PIN A3
+#define MUX_INA A0
+#define MUX_INB A1
+#define CS_LDR_PIN A2
+#define BUZZER_PIN 8
+#define LED_PIN 13
+#define PUSH_BUTTON_PIN A7
+#define ULTRA_PORT PORT_1
+
+// Line sensor
 #define LINE_BLACK_BLACK (0x00)
 #define LINE_BLACK_WHITE (0x01)
 #define LINE_WHITE_BLACK (0x02)
 #define LINE_WHITE_WHITE (0x03)
 
 // IR sensor configurations
-#define IR_READ_PIN A3
 #define IR_TOO_NEAR 200
 
 // Multiplexer configurations
-#define MUX_INA A0
-#define MUX_INB A1
 #define MUX_IR 0
 #define MUX_LED_R 1
 #define MUX_LED_G 2
@@ -35,7 +43,6 @@
 #define MUX_SETUP_DELAY 500
 
 // Colour sensor configurations
-#define CS_LDR_PIN A2
 #define CS_SAMPLES 10
 #define CS_DELAY_BEFORE_READING 250
 #define CS_DELAY_BEFORE_AMBIENT 50
@@ -76,11 +83,6 @@
 #define COLOUR_CALIBRATION_DELAY 3000
 #define IR_SENSOR_DELAY 1
 #define LINE_SENSOR_DELAY 200
-
-// Pin configurations
-#define BUZZER_PIN 8
-#define LED_PIN 13
-#define PUSH_BUTTON_PIN A7
 
 // Push button configurations
 #define PUSH_BUTTON_THRESHOLD 100
