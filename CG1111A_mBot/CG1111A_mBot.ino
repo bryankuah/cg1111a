@@ -48,8 +48,7 @@ int readIR() {
   delay(1);
   shineValue = analogRead(IR_READ_PIN);
   setMuxOut(MUX_LED_R);  // Turn off IR Emitter
-  // Serial.println(-(shineValue - ambientValue));
-  return -(shineValue - ambientValue);
+  return ambientValue - shineValue;
 }
 
 // Function to move forward
