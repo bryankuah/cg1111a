@@ -180,6 +180,21 @@ void testMovements() {
   }
 }
 
+void testIR() {
+  while (true) {
+    int irReading = readIR();
+    Serial.println(irReading);
+  }
+}
+
+void testColourSensor() {
+  while (true) {
+    colourSensor.detectColour();
+    int col = colourSensor.identifyColours();
+    colour_move(col);
+  }
+}
+
 void ambulanceLight() {
   if (clrState < 20) {
     led.setColor(255, 255, 255);
@@ -207,18 +222,9 @@ void setup() {
   led.setpin(LED_PIN);
   led.setColor(255, 0, 0);
   led.show();
-  // while (1) {
-  //   int irReading = readIR();
-  //   Serial.println(irReading);
-  // }
-  // buzzer.tone(130, 500);
-  // while(1){
-  //   colourSensor.detectColour();
-  //   int col = colourSensor.identifyColours();
-  //   colour_move(col);
-  // }
-  // colourSensor.getWhite();
+  // testColourSensor();
   // colourSensor.calibrateColourSensor();
+  // testIR();
   // testMovements();
 }
 
