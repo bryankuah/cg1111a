@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include "configurations.h"
-#include "utility.h"
+#include "mux.h"
 
 #define NUM_COMPONENTS 3
 #define NUM_COLOURS 6

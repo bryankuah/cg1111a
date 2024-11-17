@@ -1,6 +1,6 @@
 #include "configurations.h"
 #include "ColourSensor.h"
-#include "utility.h"
+#include "mux.h"
 #include "MeMCore.h"
 
 // Initialize sensors and motors
@@ -195,24 +195,6 @@ void testColourSensor() {
   }
 }
 
-void ambulanceLight() {
-  if (clrState < 20) {
-    led.setColor(255, 255, 255);
-    led.show();
-    clrState += 1;
-  } else if (clrState < 40) {
-    led.setColor(255, 0, 0);
-    led.show();
-    clrState += 1;
-  } else if (clrState < 60) {
-    led.setColor(0, 0, 255);
-    led.show();
-    clrState += 1;
-  } else {
-    clrState = 0;
-  }
-}
-
 // Arduino setup function
 void setup() {
   //Serial.begin(9600);               // Setup serial monitor for debugging purpose
@@ -265,7 +247,6 @@ void loop() {
       // reposition until both sensors detect black
       leftWheelForwardOnly();
     } else if (sensorState == LINE_WHITE_WHITE) {  // both line sensors detect white
-      // ambulanceLight();
       ultraDistance = readUltraDistance();  // distance of mBot from left wall
       // Serial.println(ultraDistance);
       if (ultraDistance < ULTRA_DISTANCE_THRESHOLD_LOW) {  // too close to left wall

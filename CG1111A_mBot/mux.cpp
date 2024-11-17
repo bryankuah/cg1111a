@@ -1,4 +1,4 @@
-#include "utility.h"
+#include "mux.h"
 
 // Function to setup the multiplexer
 void setupMultiplexer()

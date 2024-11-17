@@ -1,5 +1,5 @@
-#ifndef UTILITY_H
-#define UTILITY_H
+#ifndef MUX_H
+#define MUX_H
 
 #include <Arduino.h>
 #include "configurations.h"
@@ -10,4 +10,4 @@ void setupMultiplexer();
 // Function to set the multiplexer output
 void setMuxOut(int pin_number);
 
-#endif // UTILITY_H
+#endif // MUX_H
